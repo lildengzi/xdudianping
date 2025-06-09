@@ -1,0 +1,296 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<div th:replace="home/module/_header"></div>
+<link href="/static/front/css/blog.css" rel="stylesheet">
+
+<style>
+    .post-opt ul {
+        margin: 0 0 25px 0;
+        padding: 0;
+    }
+
+    .post-opt ul li {
+        display: inline-block;
+        font-size: 13px;
+        font-size: 0.8125rem;
+        margin-right: 0;
+    }
+
+    .post-opt ul li a {
+        background-color: #ededed;
+        padding: 5px 10px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        border-radius: 3px;
+        color: #555;
+    }
+
+    .post-opt ul li a i {
+        margin-right: 5px;
+    }
+
+</style>
+
+<main>
+
+    <div class="container margin_60_35">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="singlepost">
+                    <figure><img alt="" class="img-fluid" src="/static/front/assets/img/blog-single.jpg"></figure>
+                    <h2>[[${item.title}]]</h2>
+                    <div class="postmeta">
+                        <ul>
+                            <li><a href="#"><i class="ti-calendar"></i> [[${#dates.format(item.createTime,'yyyy-MM-dd
+                                HH:mm')}]]</a></li>
+                            <li><a th:href="'/note/user/'+${item.userId}"><i class="ti-user"></i>
+                                [[${item.user.userDisplayName}]]</a></li>
+                            <li><a href="#"><i class="ti-comment"></i> ([[${item.commentSize}]]) 评论</a></li>
+                            <li><a href="#"><i class="ti-thumb-up"></i> ([[${item.likeSize}]]) 赞</a></li>
+                            <li><a href="#"><i class="ti-star"></i> ([[${item.markSize}]]) 收藏</a></li>
+                        </ul>
+                    </div>
+                    <!-- /post meta -->
+                    <div class="post-content">
+                        <p th:utext="${item.content}"></p>
+                    </div>
+
+                    <div class="post-opt" style="text-align: center;margin-top: 20px">
+                        <ul style="margin: 0 0 25px 0;padding: 0;list-style: none;">
+                            <li style="display: inline-block;font-size: 13px;font-size: 0.8125rem;margin-right: 0;">
+                                <a href="javascript:void(0)" id="likeNote"><i class="icon_like_alt"></i>
+                                    <span  th:title="${hasLike ? '已点赞' : '点赞'}" th:text="${hasLike ? '取消点赞' : '点赞'}"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="markNote">
+                                    <i class="icon_star"></i><span th:text="${hasMark ? '取消收藏' : '收藏'}"></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /post -->
+                    </div>
+
+                    <!-- /post -->
+                </div>
+                <!-- /single-post -->
+
+                <section id="section-3" class="content-current">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="box_general write_review" id="commentContainer">
+                                <h1>笔记评论</h1>
+                                <div class="form-group">
+                                    <label>您的评论内容</label>
+                                    <textarea class="form-control" style="height: 180px;"
+                                              id="commentContent" placeholder="请输入评论内容"></textarea>
+                                    <input type="hidden" id="noteId" th:value="${item.id}">
+                                    <input type="hidden" id="pid" value="0">
+                                </div>
+                                <div style="clear: both;"></div>
+                                <div class="form-group">
+                                    <a href="javascript:void(0)" id="submitComment"
+                                       class="btn_1">提交评论</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="review_card" style="width: 100%; margin-left: 15px;margin-right: 15px;"
+                             th:each="comment : ${dataList}">
+                            <div class="row">
+                                <div class="col-md-2 user_info" style="text-align: center">
+                                    <figure><a th:href="'/note/user/'+${comment.userId}"><img th:src="${comment.user.userAvatar}" alt=""></a></figure>
+                                    <h5 style="padding-left: 10px;font-weight: bold;color: #3578fa;">[[${comment.user.userDisplayName}]]</h5>
+                                </div>
+                                <div class="col-md-10 review_content">
+                                    <div class="comment_info">
+                                        发布于 </span>[[${#dates.format(comment.createTime,'yyyy-MM-dd
+                                        HH:mm')}]]<span>|</span>
+                                        <a href="javascript:void(0)" th:attr="data-pid=${comment.id}"
+                                           class="reply replyComment"><i class="icon-reply"></i></a>
+                                    </div>
+                                    <p th:utext="${comment.content}"></p>
+
+                                    <div class="replyContainer" style="display: none">
+                                        <div class="form-group">
+                                            <textarea class="form-control replyContent" style="height: 100px;"
+                                                      placeholder="请输入评论内容"></textarea>
+                                        </div>
+                                        <div style="clear: both;"></div>
+                                        <div class="form-group">
+                                            <a href="javascript:void(0)" style="padding: 10px 15px;font-size: 0.9em;"
+                                               class="btn_1 submitReply">提交回复</a>
+
+                                            <a href="javascript:void(0)"
+                                               style="padding: 10px 15px;font-size: 0.9em;background-color: #20C997"
+                                               class="btn_1 cancelReply">取消回复</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- /row -->
+                            <div class="row reply" th:each="reply : ${comment.childCommentList}">
+                                <div class="col-md-2 user_info" style="text-align: right;">
+                                    <figure><img th:src="${reply.user.userAvatar}" alt=""></figure>
+                                    <h5 style="padding-right: 30px;font-weight: bold;color: #3578fa;">[[${reply.user.userDisplayName}]]</h5>
+
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="review_content">
+                                       发布于 [[${#dates.format(reply.createTime,'yyyy-MM-dd
+                                        HH:mm')}]]
+                                        <p style="padding-top: 5px">[[${reply.content}]]</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /reply -->
+                        </div>
+
+                        <!-- /review_card -->
+                        <div class="pagination__wrapper add_bottom_30">
+                            <ul class="pagination" th:if="${pageInfo.total > 0}">
+                                <li th:if="${pageInfo.current > 1}">
+                                    <a class="prev" tabindex="-1"
+                                       th:href="'?page='+${pageInfo.current-1}">
+                                        ❮
+                                    </a>
+                                </li>
+                                <li th:each="i: ${#numbers.sequence(1, pageInfo.pages)}" th:if="${pageInfo.pages > 1}">
+                                    <a th:classappend="${pageInfo.current == i ? 'active' : ''}"
+                                       th:href="'?page='+${i}">[[${i}]]</a>
+                                </li>
+                                <li th:if="${pageInfo.pages > pageInfo.current}">
+                                    <a class="next"
+                                       th:href="'?page='+${pageInfo.current+1}">
+                                        ❯
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /pagination -->
+                    </div>
+                    <!-- /row -->
+                </section>
+
+
+            </div>
+            <!-- /col -->
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</main>
+
+<div th:replace="home/module/_footer"></div>
+<script>
+
+    $(document).on('click', '#submitComment', function () {
+        let content = $('#commentContent').val();
+        if (content.length < 2) {
+            alert('评论不少于2个字符');
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/note/noteComment/save',
+            async: false,
+            data: {
+                'noteId': $('#noteId').val(),
+                'pid': 0,
+                'content': content,
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    alert('评论成功');
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.replyComment', function () {
+        $('#pid').val($(this).attr('data-pid'));
+        $(this).parent('.comment_info').parent('.review_content').find('.replyContainer').toggle();
+        $("#commentContainer").toggle();
+    });
+
+    $(document).on('click', '.cancelReply', function () {
+        $('#pid').val(0);
+        $(this).parent('.form-group').parent('.replyContainer').hide();
+        $("#commentContainer").toggle();
+    });
+
+
+    $(document).on('click', '.submitReply', function () {
+        let content = $(this).parent('.form-group').parent('.replyContainer').find('.replyContent').val();
+        if (content.length < 2) {
+            alert('评论不少于2个字符');
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/note/noteComment/save',
+            async: false,
+            data: {
+                'noteId': $('#noteId').val(),
+                'pid': $('#pid').val(),
+                'content': content,
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    alert('回复成功');
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#likeNote', function () {
+        $.ajax({
+            type: 'POST',
+            url: '/note/like',
+            async: false,
+            data: {
+                'noteId': $('#noteId').val(),
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    alert(data.msg);
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#markNote', function () {
+        $.ajax({
+            type: 'POST',
+            url: '/note/mark',
+            async: false,
+            data: {
+                'noteId': $('#noteId').val(),
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    alert(data.msg);
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+</script>

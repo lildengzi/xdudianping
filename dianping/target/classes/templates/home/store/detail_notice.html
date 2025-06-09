@@ -1,0 +1,384 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<!--  店铺的菜品预告  -->
+
+
+    <div th:replace="home/module/_header"></div>
+    <main>
+        <div class="reviews_summary">
+            <div class="wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <figure>
+                                <img th:src="${item.photo}" alt="">
+                            </figure>
+<!--                            <small>店铺信息</small>-->
+                            <h1>[[${item.name}]]</h1>
+                            <p>[[${item.address}]] <br>
+                                <span style="color: #e04040; font-size: 12px; font-size: 0.75rem; font-weight: bold;display: block;margin-top: 5px;">人均消费：[[${item.avgPrice}]]元</span>
+                            </p>
+                            <p th:if="${!hasMark}"><button class="btn btn-primary btn-xs" th:onclick="'saveStoreMark('+${item.id}+')'">收藏</button></p>
+                            <p th:if="${hasMark}"><button class="btn btn-danger btn-xs" th:onclick="'cancelStoreMark('+${item.id}+')'">取消收藏</button></p>
+                        </div>
+                        <div class="col-lg-6 review_detail">
+                            <div class="row">
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.score < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 1 && item.score < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 2 && item.score < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 3 && item.score < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 4 && item.score < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>总体评分 [[${item.score}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.environmentScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 1 && item.environmentScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 2 && item.environmentScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 3 && item.environmentScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 4 && item.environmentScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+
+                                        <span th:if="${item.environmentScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>环境评分 [[${item.environmentScore}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.serviceScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 1 && item.serviceScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 2 && item.serviceScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 3 && item.serviceScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 4 && item.serviceScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>服务评分 [[${item.serviceScore}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                <span class="rating">
+                                        <span th:if="${item.tasteScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 1 && item.tasteScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 2 && item.tasteScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 3 && item.tasteScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 4 && item.tasteScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>口味评分 [[${item.tasteScore}]]分</em>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /container -->
+            </div>
+        </div>
+        <!-- /reviews_summary -->
+
+        <div class="container margin_60_35">
+            <div class="row">
+
+                <div class="container margin_tabs">
+                    <div class="tabs">
+                        <nav>
+                            <ul>
+                                <li><a th:href="'/store/'+${item.id}"><i class="pe-7s-diamond"></i>菜品<em>店家上架的菜品</em></a></li>
+                                <li class="tab-current"><a th:href="'/store/'+${item.id}+'/notice'"><i class="pe-7s-repeat"></i>菜品预告 <em>特价菜品，优惠套餐</em> </a></li>
+                                <li><a th:href="'/store/'+${item.id}+'/comment'"><i class="pe-7s-comment"></i>评价<em>看看同学们的评价</em></a></li>
+                            </ul>
+                        </nav>
+                        <div class="content">
+                            <section id="section-1" >
+                                <div class="row">
+
+                                </div>
+                                <!-- /row -->
+                            </section>
+                            <section id="section-2" class="content-current">
+                                <div class="row">
+                                    <div class="isotope-wrapper" style="width: 100%;">
+
+                                        <div class="company_listing isotope-item high"
+                                             th:each="item : ${dataList}">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="company_info">
+                                                        <figure>
+                                                            <a th:href="'/dishNotice/'+${item.id}">
+                                                                <img th:src="${item.photo}" alt="">
+                                                            </a>
+                                                        </figure>
+                                                        <h3>
+                                                            <a th:href="'/dishNotice/'+${item.id}" style="color: #222222;">[[${item.name}]]</a>
+                                                        </h3>
+                                                        <p th:utext="${item.content}"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="text-center float-lg-right">
+                                                        <a th:href="'/dishNotice/'+${item.id}" class="btn_1 small">查看详情</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /company_listing -->
+
+                                    </div>
+                                    <!-- /isotope-wrapper -->
+
+                                    <div class="pagination__wrapper add_bottom_30">
+                                        <ul class="pagination" th:if="${pageInfo.total > 0}">
+                                            <li th:if="${pageInfo.current > 1}">
+                                                <a class="prev" tabindex="-1"
+                                                   th:href="'?page='+${pageInfo.current-1}">
+                                                    ❮
+                                                </a>
+                                            </li>
+                                            <li th:each="i: ${#numbers.sequence(1, pageInfo.pages)}" th:if="${pageInfo.pages > 1}">
+                                                <a th:classappend="${pageInfo.current == i ? 'active' : ''}"
+                                                   th:href="'?page='+${i}">[[${i}]]</a>
+                                            </li>
+                                            <li th:if="${pageInfo.pages > pageInfo.current}">
+                                                <a class="next"
+                                                   th:href="'?page='+${pageInfo.current+1}">
+                                                    ❯
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <!-- /row -->
+                            </section>
+                            <section id="section-3" class="">
+                                <div class="row">
+
+                                </div>
+                                <!-- /row -->
+                            </section>
+                        </div>
+                        <!-- /content -->
+                    </div>
+                    <!-- /tabs -->
+                </div>
+
+                <!--                <div class="col-lg-8">-->
+                <!--                    <div class="review_card">-->
+                <!--                        <div class="row">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar1.jpg" alt=""></figure>-->
+                <!--                                <h5>Marika</h5>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10 review_content">-->
+                <!--                                <div class="clearfix add_bottom_15">-->
+                <!--                                    <span class="rating"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star empty"></i><em>4.50/5.00</em></span>-->
+                <!--                                    <em>Published 54 minutes ago</em>-->
+                <!--                                </div>-->
+                <!--                                <h4>"Avesome Experience"</h4>-->
+                <!--                                <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li><a href="#0"><i class="icon_like_alt"></i><span>Useful</span></a></li>-->
+                <!--                                    <li><a href="#0"><i class="icon_dislike_alt"></i><span>Not useful</span></a></li>-->
+                <!--                                    <li><span>Share</span> <a href="#0"><i class="ti-facebook"></i></a> <a href="#0"><i class="ti-twitter-alt"></i></a> <a href="#0"><i class="ti-google"></i></a></li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /row &ndash;&gt;-->
+                <!--                        <div class="row reply">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar.jpg" alt=""></figure>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10">-->
+                <!--                                <div class="review_content">-->
+                <!--                                    <strong>Reply from Good Electronics</strong>-->
+                <!--                                    <em>Published 3 minutes ago</em>-->
+                <!--                                    <p><br>Hi Monika,<br><br>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.<br><br>Thanks</p>-->
+                <!--                                </div>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /reply &ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; /review_card &ndash;&gt;-->
+                <!--                    <div class="review_card">-->
+                <!--                        <div class="row">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar4.jpg" alt=""></figure>-->
+                <!--                                <h5>Lukas</h5>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10 review_content">-->
+                <!--                                <div class="clearfix add_bottom_15">-->
+                <!--                                    <span class="rating"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><em>5.00/5.00</em></span>-->
+                <!--                                    <em>Published 54 minutes ago</em>-->
+                <!--                                </div>-->
+                <!--                                <h4>"Avesome Experience"</h4>-->
+                <!--                                <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li><a href="#0"><i class="icon_like_alt"></i><span>Useful</span></a></li>-->
+                <!--                                    <li><a href="#0"><i class="icon_dislike_alt"></i><span>Not useful</span></a></li>-->
+                <!--                                    <li><span>Share</span> <a href="#0"><i class="ti-facebook"></i></a> <a href="#0"><i class="ti-twitter-alt"></i></a> <a href="#0"><i class="ti-google"></i></a></li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /row &ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; /review_card &ndash;&gt;-->
+                <!--                    <div class="review_card">-->
+                <!--                        <div class="row">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar6.jpg" alt=""></figure>-->
+                <!--                                <h5>Marika</h5>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10 review_content">-->
+                <!--                                <div class="clearfix add_bottom_15">-->
+                <!--                                    <span class="rating"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star empty"></i><em>4.50/5.00</em></span>-->
+                <!--                                    <em>Published 54 minutes ago</em>-->
+                <!--                                </div>-->
+                <!--                                <h4>"Avesome Experience"</h4>-->
+                <!--                                <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li><a href="#0"><i class="icon_like_alt"></i><span>Useful</span></a></li>-->
+                <!--                                    <li><a href="#0"><i class="icon_dislike_alt"></i><span>Not useful</span></a></li>-->
+                <!--                                    <li><span>Share</span> <a href="#0"><i class="ti-facebook"></i></a> <a href="#0"><i class="ti-twitter-alt"></i></a> <a href="#0"><i class="ti-google"></i></a></li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /row &ndash;&gt;-->
+                <!--                        <div class="row reply">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar.jpg" alt=""></figure>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10">-->
+                <!--                                <div class="review_content">-->
+                <!--                                    <strong>Reply from Good Electronics</strong>-->
+                <!--                                    <em>Published 3 minutes ago</em>-->
+                <!--                                    <p><br>Hi Monika,<br><br>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.<br><br>Thanks</p>-->
+                <!--                                </div>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /reply &ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; /review_card &ndash;&gt;-->
+                <!--                    <div class="review_card">-->
+                <!--                        <div class="row">-->
+                <!--                            <div class="col-md-2 user_info">-->
+                <!--                                <figure><img src="img/avatar7.jpg" alt=""></figure>-->
+                <!--                                <h5>Lukas</h5>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-md-10 review_content">-->
+                <!--                                <div class="clearfix add_bottom_15">-->
+                <!--                                    <span class="rating"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><em>5.00/5.00</em></span>-->
+                <!--                                    <em>Published 54 minutes ago</em>-->
+                <!--                                </div>-->
+                <!--                                <h4>"Avesome Experience"</h4>-->
+                <!--                                <p>Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his. Tollit molestie suscipiantur his et.</p>-->
+                <!--                                <ul>-->
+                <!--                                    <li><a href="#0"><i class="icon_like_alt"></i><span>Useful</span></a></li>-->
+                <!--                                    <li><a href="#0"><i class="icon_dislike_alt"></i><span>Not useful</span></a></li>-->
+                <!--                                    <li><span>Share</span> <a href="#0"><i class="ti-facebook"></i></a> <a href="#0"><i class="ti-twitter-alt"></i></a> <a href="#0"><i class="ti-google"></i></a></li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash; /row &ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; /review_card &ndash;&gt;-->
+                <!--                    <div class="pagination__wrapper add_bottom_15">-->
+                <!--                        <ul class="pagination">-->
+                <!--                            <li><a href="#0" class="prev" title="previous page">❮</a></li>-->
+                <!--                            <li><a href="#0" class="active">1</a></li>-->
+                <!--                            <li><a href="#0">2</a></li>-->
+                <!--                            <li><a href="#0">3</a></li>-->
+                <!--                            <li><a href="#0">4</a></li>-->
+                <!--                            <li><a href="#0" class="next" title="next page">❯</a></li>-->
+                <!--                        </ul>-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; /pagination &ndash;&gt;-->
+                <!--                </div>-->
+                <!--                &lt;!&ndash; /col &ndash;&gt;-->
+                <!--                <div class="col-lg-4">-->
+                <!--                    <div class="box_general company_info">-->
+                <!--                        <h3>Good Electronics</h3>-->
+                <!--                        <p>Illud scripserit mei an, sea te sonet partem contentiones. Eu quo corrumpit euripidis, enim sadipscing eos an. Mucius doctus constituto pri at, ne cetero postulant pro. At vix utinam corpora, ea oblique moderatius usu. Vix id viris consul honestatis, an constituto deterruisset consectetuer pro.</p>-->
+                <!--                        <p><strong>Address</strong><br>97845 Baker st. 567<br>Los Angeles - US</p>-->
+                <!--                        <p><strong>Website</strong><br><a href="#0">www.goodelectronics.com</a></p>-->
+                <!--                        <p><strong>Email</strong><br><a href="#0">info@goodelectronics.com</a></p>-->
+                <!--                        <p><strong>Telephone</strong><br>+54 423 565624</p>-->
+                <!--                        <p class="follow_company"><strong>Follow us</strong><br><a href="#0"><i class="social_facebook_circle"></i></a><a href="#0"><i class="social_twitter_circle"></i></a><a href="#0"><i class="social_googleplus_circle"></i></a><a href="#0"><i class="social_instagram_circle"></i></a></p>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+
+    </main>
+    <!--/main-->
+
+    <div th:replace="home/module/_footer"></div>

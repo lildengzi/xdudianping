@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <div th:replace="home/module/_header"></div>
+
+    <main>
+        <section class="hero_single general">
+            <div class="wrapper">
+                <div class="container">
+                    <form>
+
+                        <h2 style="color: #ffffff;font-size: 10em;">500</h2>
+                        <p>提示：[[${message != null ? message : '系统异常，请检查IDEA控制台'}]]</p>
+
+
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- /hero_single -->
+    </main>
+
+    <div th:replace="home/module/_footer"></div>

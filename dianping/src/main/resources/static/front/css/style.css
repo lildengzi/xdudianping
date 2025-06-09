@@ -1,0 +1,103 @@
+/* 全局样式 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 导航栏样式 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.nav-link {
+    color: #666;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* 页脚样式 */
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: 40px;
+    color: #666;
+}
+
+/* 容器样式 */
+.main-container {
+    min-height: calc(100vh - 160px);
+    padding: 20px 0;
+}
+
+/* 通用样式 */
+.btn_1 {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn_1:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+/* 食堂卡片样式 */
+.canteen-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.canteen-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.canteen-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.canteen-item h3 {
+    margin: 15px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.canteen-item p {
+    margin: 0 15px 15px;
+    color: #666;
+}
+
+.canteen-item .btn_1 {
+    margin: 0 15px 15px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .canteen-item img {
+        height: 150px;
+    }
+}

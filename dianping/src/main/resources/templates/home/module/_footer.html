@@ -1,0 +1,74 @@
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                © 2025 西电高校食堂综合点评系统
+            </div>
+        </div>
+    </div>
+</footer>
+<!--/footer-->
+</div>
+<!-- page -->
+
+<!-- Sign In Popup -->
+<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
+    <div class="small-dialog-header">
+        <h3>快速登录</h3>
+    </div>
+    <form>
+        <div class="sign-in-wrapper">
+            <div class="form-group">
+                <label>账号</label>
+                <input type="text" class="form-control" name="email" id="userName">
+                <i class="icon_mail_alt"></i>
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" class="form-control" name="password" id="userPass">
+                <i class="icon_lock_alt"></i>
+            </div>
+            <div class="text-center"><input type="button" value="登录" id="quickLogin" class="btn_1 full-width"></div>
+            <div class="text-center">
+                <a href="/register">前往注册</a> | <a href="/forget">忘记密码</a>
+            </div>
+        </div>
+    </form>
+    <!--form -->
+</div>
+<!-- /Sign In Popup -->
+
+<div id="toTop"></div><!-- Back to top button -->
+
+<!-- COMMON SCRIPTS -->
+<script src="/static/plugins/jquery/jquery.min.js"></script>
+<script src="/static/front/js/bootstrap.bundle.min.js"></script>
+<script src="/static/front/js/common_scripts.js"></script>
+<script src="/static/front/js/functions.js"></script>
+<script src="/static/plugins/toast/js/jquery.toast.min.js"></script>
+<script src="/static/front/assets/validate.js"></script>
+<script src="/static/front/js/tabs.js"></script>
+<script src="/static/front/js/custom.js?v=2.0"></script>
+
+<!-- 错误重试脚本 -->
+<script>
+function retryFailedResources() {
+    const failedResources = [];
+    window.addEventListener('error', function(e) {
+        if (e.target.tagName === 'LINK' || e.target.tagName === 'SCRIPT') {
+            const resource = e.target.src || e.target.href;
+            if (!failedResources.includes(resource)) {
+                failedResources.push(resource);
+                setTimeout(() => {
+                    const elem = e.target.cloneNode(true);
+                    e.target.parentNode.replaceChild(elem, e.target);
+                }, 2000);
+            }
+        }
+    }, true);
+}
+retryFailedResources();
+</script>
+
+</body>
+</html>

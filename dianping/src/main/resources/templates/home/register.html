@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>食堂点评系统 &lsaquo; 注册</title>
+        <link rel='stylesheet' id='dashicons-css' href='/static/css/dashicons.min.css' type='text/css' media='all'/>
+        <link rel='stylesheet' id='buttons-css' href='/static/css/buttons.min.css' type='text/css' media='all'/>
+        <link rel='stylesheet' id='login-css' href='/static/css/login.min.css' type='text/css' media='all'/>
+        <meta name='robots' content='noindex,follow'/>
+        <meta name="viewport" content="width=device-width"/>
+        <link rel="stylesheet" href="/static/plugins/animate/animate.min.css">
+        <link rel="stylesheet" href="/static/plugins/toast/css/jquery.toast.min.css">
+
+    </head>
+    <body class="login login-action-login wp-core-ui  locale-zh-cn">
+        <div id="login" style="padding: 4% 0 0" class="login-body animated">
+            <h1><a href="/" title="欢迎您光临本站！" tabindex="-1">用户注册</a></h1>
+            <p class="message register">食堂点评系统，欢迎注册！</p>
+
+            <form name="loginform" id="form" method="post">
+                <p>
+                    <label for="userName">账号<br/>
+                        <input type="text" name="userName" id="userName" class="input" size="20" required/>
+                    </label>
+                </p>
+                <p>
+                    <label for="userName">密码<br/>
+                        <input type="password" name="userPass" id="userPass" class="input" size="20"
+                               required/>
+                    </label>
+                </p>
+                <p>
+                    <label for="userName">真实姓名<br/>
+                        <input type="text" name="realName" id="realName" class="input" size="20"
+                               required/>
+                    </label>
+                </p>
+                <p>
+                    <label for="userName">电话号码<br/>
+                        <input type="text" name="phone" id="phone" class="input" size="20"
+                               required/>
+                    </label>
+                </p>
+                <p>
+                    <label for="userName">电子邮箱<br/>
+                        <input type="email" name="email" id="email" class="input" size="20"
+                               required/>
+                    </label>
+                </p>
+                <div style="clear: both;"></div>
+                <p class="submit">
+                    <button type="button" id="btn-login"
+                            data-loading-text="加载中..."
+                            class="btn button button-primary button-large btn-block login-button fadeInUp"
+                            onclick="register()"
+                            style="animation-delay: 0.4s;outline: none;">
+                        注册
+                    </button>
+                </p>
+                <br>
+            </form>
+
+            <p id="nav">
+                <a href="/login">登录</a> |
+                <a href="/forget">找回密码？</a>
+            </p>
+
+        </div>
+
+        <script src="/static/plugins/jquery/jquery.min.js"></script>
+        <script src="/static/plugins/toast/js/jquery.toast.min.js"></script>
+        <script src="/static/plugins/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/static/js/app.js"></script>
+        <script>
+            function register() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/register',
+                    async: false,
+                    data: {
+                        'userName': $('#userName').val(),
+                        'realName': $('#realName').val(),
+                        'phone': $('#phone').val(),
+                        'email': $('#email').val(),
+                        'userPass': $('#userPass').val()
+                    },
+                    success: function (data) {
+                        if (data.code == 1) {
+                            showMsgAndRedirect(data.msg, "success", 1000, "/login");
+                        } else {
+                            showMsg(data.msg, "error", 2000);
+                        }
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

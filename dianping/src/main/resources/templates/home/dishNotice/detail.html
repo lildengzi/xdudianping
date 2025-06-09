@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <div th:replace="home/module/_header"></div>
+    <main>
+        <div class="reviews_summary">
+            <div class="wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <figure>
+                                <img th:src="${item.photo}" alt="">
+                            </figure>
+                            <small>菜品信息</small>
+                            <h1>[[${item.name}]]</h1>
+                        </div>
+                    </div>
+                </div>
+                <!-- /container -->
+            </div>
+        </div>
+        <!-- /reviews_summary -->
+
+        <div class="container margin_60_35">
+            <div class="row">
+                <div class="col-lg-8">
+
+                    <div class="review_card" style="padding: 10px;"th:utext="${item.content}">
+
+                    </div>
+
+                </div>
+                <!-- /col -->
+                <div class="col-lg-4">
+                    <div class="box_general company_info">
+                        <h3>[[${store.name}]]</h3>
+                        <p>
+                            <img th:src="${store.photo}" style="width: 100%;" alt="">
+                        </p>
+                        <p><strong>档口地址</strong><br>[[${store.address}]]</p>
+                        <p><strong>负责人联系人</strong><br>[[${store.businessName}]]</p>
+                        <p><strong>负责人电话</strong><br>[[${store.businessPhone}]]</p>
+                        <p>
+                            <a th:href="'/store/'+${store.id}" class="btn btn-primary">档口主页</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+
+    </main>
+    <!--/main-->
+
+
+    <div th:replace="home/module/_footer"></div>

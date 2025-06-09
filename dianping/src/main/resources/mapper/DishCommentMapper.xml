@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.DishCommentMapper">
+    <sql id="tableName">
+        biz_dish_comment
+    </sql>
+
+    <sql id="baseColumn">
+        id,user_id,dish_id,score,content,pid
+    </sql>
+
+    <select id="getDishScoreRank" resultType="com.example.sens.common.vo.RankVO">
+        SELECT
+            dish_id AS dishId,
+            sum( score ) totalScore,
+            count( * ) count,
+            sum( score ) / count( * ) avgScore
+        FROM
+            biz_dish_comment
+        WHERE
+            pid = 0
+        GROUP BY
+            dish_id
+        ORDER BY
+            avgScore DESC
+            LIMIT 10
+    </select>
+
+    <select id="getScoreByDishId" resultType="java.lang.Integer">
+        SELECT
+            IFNULL( ceil( avg( score ) ), 0 )
+        FROM
+            biz_dish_comment
+        WHERE
+            pid = 0
+    </select>
+
+
+</mapper>

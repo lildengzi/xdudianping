@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增食堂 - 校园食堂点评系统</title>
+    <link rel="stylesheet" th:href="@{/admin/plugins/layui/css/layui.css}">
+</head>
+<body>
+<div class="layui-form" lay-filter="canteenForm" style="padding: 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">食堂名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required lay-verify="required" 
+                   placeholder="请输入食堂名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">食堂图片</label>
+        <div class="layui-input-block">
+            <input type="text" name="photo" required lay-verify="required" 
+                   placeholder="请上传食堂图片" autocomplete="off" class="layui-input">
+            <button type="button" class="layui-btn" id="uploadBtn">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+            <div class="layui-upload-list">
+                <img class="layui-upload-img" id="preview" style="max-width: 200px;">
+            </div>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">营业时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="businessTime" required lay-verify="required" 
+                   placeholder="请输入营业时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="address" required lay-verify="required" 
+                   placeholder="请输入地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">楼层数</label>
+        <div class="layui-input-block">
+            <input type="number" name="floorCount" required lay-verify="required|number" 
+                   placeholder="请输入楼层数" autocomplete="off" class="layui-input" value="2">
+        </div>
+    </div>
+    
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">食堂简介</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入食堂简介" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="status" lay-skin="switch" lay-text="营业|休息" checked>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="canteenForm">保存</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/admin/plugins/layui/layui.js}"></script>
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<script>
+layui.use(['form', 'upload'], function() {
+    var form = layui.form;
+    var upload = layui.upload;
+    var layer = layui.layer;
+    
+    // 图片上传
+    upload.render({
+        elem: '#uploadBtn',
+        url: '/upload/image',
+        done: function(res) {
+            if (res.code === 0) {
+                $('input[name="photo"]').val(res.data);
+                $('#preview').attr('src', res.data);
+            } else {
+                layer.msg('上传失败');
+            }
+        }
+    });
+    
+    // 表单提交
+    form.on('submit(canteenForm)', function(data) {
+        var field = data.field;
+        field.status = field.status ? 1 : 0;
+        
+        $.ajax({
+            url: '/admin/canteen/save',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(field),
+            success: function(res) {
+                if (res) {
+                    layer.msg('保存成功', {
+                        time: 1000
+                    }, function() {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.location.reload();
+                    });
+                } else {
+                    layer.msg('保存失败');
+                }
+            }
+        });
+        return false;
+    });
+});
+</script>
+</body>
+</html> 

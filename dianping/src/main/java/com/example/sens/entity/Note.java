@@ -1,0 +1,71 @@
+package com.example.sens.entity;
+
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
+import java.util.Date;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+/**
+ * (biz_note)实体类
+ *
+ * @author saysky
+ * @description
+ * @since 2024-02-18 12:39:38
+ */
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
+@TableName("biz_note")
+public class Note extends Model<Note> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * id
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
+    /**
+     * 用户id
+     */
+    private Long userId;
+    /**
+     * 内容
+     */
+    private String content;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
+     * 评论数
+     */
+    private Integer commentSize;
+
+    /**
+     * 点赞数
+     */
+    private Integer likeSize;
+
+    /**
+     * 收藏数
+     */
+    private Integer markSize;
+
+    @TableField(exist = false)
+    private User user;
+
+}

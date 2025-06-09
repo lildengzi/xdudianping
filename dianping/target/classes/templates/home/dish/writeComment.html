@@ -1,0 +1,64 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <div th:replace="home/module/_header"></div>
+    <main class="margin_main_container">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="box_general write_review">
+                        <h1>请给菜品进行评价</h1>
+                        <div class="rating_submit">
+                            <div class="form-group">
+                                <label class="d-block">菜品总体评分</label>
+                                <span class="rating">
+                                    <input type="radio" id="star_1" class="rating-input" name="rating-input" value="5"><label data-value="5" for="star_1" class="rating-star commentStar"></label>
+                                    <input type="radio" id="star_2" class="rating-input" name="rating-input" value="4"><label data-value="4" for="star_2" class="rating-star commentStar"></label>
+                                    <input type="radio" id="star_3" class="rating-input" name="rating-input" value="3"><label data-value="3" for="star_3" class="rating-star commentStar"></label>
+                                    <input type="radio" id="star_4" class="rating-input" name="rating-input" value="2"><label data-value="2" for="star_4" class="rating-star commentStar"></label>
+                                    <input type="radio" id="star_5" class="rating-input" name="rating-input" value="1"><label data-value="1" for="star_5" class="rating-star commentStar"></label>
+                                </span>
+                                <input type="hidden" id="score">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>您的评价</label>
+                            <textarea class="form-control" style="height: 180px;" id="commentContent" placeholder="请输入评价内容"></textarea>
+                            <input type="hidden" id="dishId" th:value="${item.id}">
+                        </div>
+                        <div class="form-group">
+                            <div class="checkboxes float-left add_bottom_15 add_top_15">
+                                <label class="container_check">我承诺我的评价真实有效
+                                    <input type="checkbox" id="commentCheck">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <div class="form-group">
+                            <a href="javascript:void(0)" id="submitDishComment" class="btn_1">提交评价</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /col -->
+                <div class="col-lg-4">
+                    <div class="box_general company_info">
+                        <h3>[[${item.name}]]</h3>
+                        <p>
+                            <img th:src="${item.photo}" style="width: 100%;" alt="">
+                        </p>
+                        <p>
+                            <a th:href="'/dish/'+${item.id}" class="btn btn-primary">菜品主页</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </main>
+    <!--/main-->
+
+
+    <div th:replace="home/module/_footer"></div>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+
+<div class="wrapper">
+    <div th:replace="admin/module/_sidebar"></div>
+    <div class="content-wrapper">
+        <style type="text/css" rel="stylesheet">
+
+        </style>
+        <section class="content-header">
+            <h1 style="display: inline-block;">店铺评价列表</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="/admin">
+                        <i class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li><a data-pjax="true" href="/storeComment">店铺评价管理</a></li>
+                <li class="active">店铺评价列表</li>
+            </ol>
+        </section>
+        <section class="content container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-md-4 col-xs-12" style="margin-bottom: 10px;padding-left: 0;">
+                        <button th:if="${isAdmin}" type="button" class="btn btn-danger" onclick="batchDelete()">
+                            <i class="fa fa-remove"></i> 批量删除
+                        </button>
+                    </div>
+                    <div class="col-md-8 col-xs-12"
+                         style="margin-bottom: 10px; text-align:right;padding-left: 0; padding-right: 0;">
+                        <form class="form-inline" action="/admin/storeComment/list" th:if="${ storeList.size() > 1}">
+<!--                            <div class="form-group">-->
+<!--                                <input type="text" class="form-control" id="keywords" name="keywords"-->
+<!--                                       th:value="${keywords}" placeholder="请输入关键字">-->
+<!--                            </div>-->
+                            <div class="form-group" th:if="${!isCustomer}" >
+                                <select class="form-control" name="storeId">
+                                    <option value="-1">请选择店铺</option>
+                                    <option th:if="${storeList.size() == 1}" th:each="store : ${storeList}"
+                                            th:value="${store.id}" selected>[[${store.name}]]
+                                    </option>
+                                    <option th:if="${storeList.size() != 1}" th:each="store : ${storeList}"
+                                            th:value="${store.id}" th:selected="${storeId == store.id}">
+                                        [[${store.name}]]
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-body table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-1">
+                                        <input type="checkbox" id="allSelect" onclick="doCheck()">
+                                    </th>
+                                    <th>评价人</th>
+                                    <th>店铺名称</th>
+                                    <th class="col-md-1">评价总分</th>
+                                    <th class="col-md-1">口味评分</th>
+                                    <th class="col-md-1">服务评分</th>
+                                    <th class="col-md-1">环境评分</th>
+                                    <th class="col-md-1">状态</th>
+                                    <th class="col-md-2">创建时间</th>
+                                    <th class="col-md-2">操作</th>
+                                    <th class="col-md-1">ID</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${dataList}">
+                                    <td>
+                                        <input type="checkbox" name="ids" th:value="${item.id}">
+                                    </td>
+                                    <td>
+                                        <span th:title="${item.user.userName}">[[${item.user.userDisplayName}]]</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="'/store/'+${item.store.id}">[[${item.store.name}]]</a>
+                                    </td>
+                                    <td>[[${item.score}]]</td>
+                                    <td>[[${item.tasteScore}]]</td>
+                                    <td>[[${item.environmentScore}]]</td>
+                                    <td>[[${item.serviceScore}]]</td>
+                                    <td>
+                                        <span th:if="${item.status == 0}" class="text-warning">待审核</span>
+                                        <span th:if="${item.status == 1}" class="text-success">已审核</span>
+                                        <span th:if="${item.status == 2}" class="text-primary">已回复</span>
+                                        <span th:if="${item.status == 3}" class="text-danger">已驳回</span>
+                                    </td>
+                                    <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm')}"></td>
+                                    <td>
+                                        <a th:if="${isAdmin && item.status == 0}" href="javascript:void(0)"
+                                           th:onclick="'passIt('+${item.id}+')'"
+                                           class="btn btn-success btn-xs">
+                                            通过
+                                        </a>
+                                        <a th:if="${isAdmin && item.status == 0}" href="javascript:void(0)"
+                                           th:onclick="'rejectIt('+${item.id}+')'"
+                                           class="btn btn-danger btn-xs">
+                                            驳回
+                                        </a>
+                                        <a class="btn btn-primary btn-xs"
+                                           th:href="'/admin/storeComment/detail?id='+${item.id}">查看</a>
+                                        <a th:if="${(isAdmin || isBusiness) && (item.status == 1 || item.status == 2)}" href="javascript:void(0)"
+                                           th:onclick="'replyShow('+${item.id}+')'"
+                                           class="btn btn-info btn-xs">
+                                            <span th:text="${item.status == 2 ? '追加回复' : '回复'}"></span>
+                                        </a>
+                                        <a th:if="${isAdmin || isCustomer}" href="javascript:void(0)"
+                                           th:onclick="'removeIt('+${item.id}+')'"
+                                           class="btn btn-danger btn-xs">删除</a>
+                                    </td>
+                                    <td>
+                                        <a th:href="'/admin/storeComment/detail?id='+${item.id}">[[${item.id}]]</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <div class="no-margin pull-left">
+                                第 [[${pageInfo.current}]] / [[${pageInfo.pages}]] 页
+                            </div>
+                            <ul class="pagination no-margin pull-right">
+                                <li><a data-pjax="true" th:classappend="${pageInfo.current == 1 ? 'disabled' : ''}"
+                                       class="btn btn-sm"
+                                       th:href="'?keywords='+${keywords}">
+                                    首页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current == 1 ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.current-1}+'&keywords='+${keywords}">
+                                    上一页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current >= pageInfo.pages ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.current+1}+'&keywords='+${keywords}">
+                                    下一页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current >= pageInfo.pages ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.pages}+'&keywords='+${keywords}">
+                                    尾页
+                                </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 评论弹出层 -->
+            <div class="modal fade" id="commentReplyModal">
+                <div class="modal-dialog">
+                    <div class="modal-content message_align">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">回复评价</h4>
+                        </div>
+                        <form method="post" action="/admin/comment/reply" id="commentReplyForm">
+                            <div class="modal-body">
+                            <textarea class="form-control comment-input-content" rows="5" id="commentContent"
+                                      name="content" style="resize: none"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="id" name="id" value=""/>
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">取消
+                                </button>
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        onclick="replyIt()">确定
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <script>
+
+            function removeIt(id) {
+                layer.confirm("你确定是否删除？", function (index) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/admin/storeComment/delete',
+                        async: false,
+                        data: {
+                            'id': id
+                        },
+                        success: function (data) {
+                            if (data.code == 0) {
+                                showMsg(data.msg, "error", 2000);
+                            } else {
+                                showMsgAndReload(data.msg, "success", 1000);
+                            }
+
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+
+
+            function batchDelete() {
+                var arr = [];
+                $('input[name="ids"]:checked').each(function () {
+                    arr.push($(this).val());
+                });
+                if (arr.length <= 0) {
+                    showMsg('请选择要删除的记录', "error", 2000);
+                } else {
+                    layer.confirm('你确定是否删除?', function (index) {
+                        $.ajax({
+                            url: "/admin/storeComment/batchDelete?ids=" + arr,
+                            type: "POST",
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    showMsg(data.msg, "error", 2000);
+                                } else {
+                                    showMsgAndReload(data.msg, "success", 1000);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            }
+
+            function replyIt() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/storeComment/reply',
+                    async: false,
+                    data: $('#commentReplyForm').serialize(),
+                    success: function (data) {
+                        if (data.code == 0) {
+                            showMsg(data.msg, "error", 1000);
+                        } else {
+                            showMsgAndReload(data.msg, "success", 1000);
+                        }
+                    }
+                });
+            };
+
+            function replyShow(id) {
+                $('#id').val(id);
+                $('#commentReplyModal').modal();
+            }
+
+
+            function passIt(id) {
+                layer.confirm("你确定是否审核通过该评价？", function (index) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/storeComment/pass',
+                        async: false,
+                        data: {
+                            'id': id
+                        },
+                        success: function (data) {
+                            if (data.code == 0) {
+                                showMsg(data.msg, "error", 2000);
+                            } else {
+                                showMsgAndReload(data.msg, "success", 1000);
+                            }
+
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+
+            function rejectIt(id) {
+                layer.confirm("你确定是否审核驳回该评价？", function (index) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/storeComment/reject',
+                        async: false,
+                        data: {
+                            'id': id
+                        },
+                        success: function (data) {
+                            if (data.code == 0) {
+                                showMsg(data.msg, "error", 2000);
+                            } else {
+                                showMsgAndReload(data.msg, "success", 1000);
+                            }
+
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        </script>
+    </div>
+</div>
+<div th:replace="admin/module/_footer"></div>
+

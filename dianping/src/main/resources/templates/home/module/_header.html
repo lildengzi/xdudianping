@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="西电食堂综合点评系统">
+    <meta name="author" content="XIDIAN">
+    <title>[[${title != null ? title : '西电食堂综合点评系统'}]]</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="/static/front/img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="/static/front/img/apple-touch-icon-57x57-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+          href="/static/front/img/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+          href="/static/front/img/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+          href="/static/front/img/apple-touch-icon-144x144-precomposed.png">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="/static/front/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/front/css/style.css?v=2" rel="stylesheet">
+    <link href="/static/front/css/vendors.css" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="/static/front/css/custom.css?v=2" rel="stylesheet">
+
+    <!-- 资源加载错误处理 -->
+    <script>
+    window.addEventListener('error', function(e) {
+        if (e.target.tagName === 'LINK' || e.target.tagName === 'SCRIPT') {
+            console.error('Resource failed to load:', e.target.src || e.target.href);
+        }
+    }, true);
+    </script>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+<div id="page">
+
+    <header class="header_in">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12">
+                    <div id="logo">
+                        <a href="/">
+                            <!--                                    <img src="/static/front/img/logo_sticky.svg" width="140" height="35" alt="" class="logo_sticky">-->
+                            <span style="color: #3578FA; font-size: 20px; font-weight: bold">西电高校食堂综合点评系统</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-12">
+                    <ul id="top_menu">
+                        <li><a href="#sign-in-dialog" th:if="${session.user == null}" id="sign-in" class="login"
+                               title="登录"></a></li>
+                        <li th:if="${session.user != null}">
+                            <div class="dropdown dropdown-user">
+                                <a href="/admin/user/profile" class="logged" data-toggle="dropdown">
+                                    <img th:src="${session.user.userAvatar}" alt="">
+                                </a>
+                                <div class="dropdown-menu">
+                                    <ul th:if="${session.user.role.role == 'customer'}">
+                                        <li><a href="/admin/note">我的笔记</a></li>
+                                        <li><a href="/admin/mark/">我的收藏</a></li>
+                                        <li><a href="/admin/mark/">我的档口评价</a></li>
+                                        <li><a href="/admin/mark/">我的菜品评价</a></li>
+                                        <li><a href="/logout">退出登录</a></li>
+                                    </ul>
+                                    <ul th:if="${session.user.role.role == 'admin'}">
+                                        <li><a href="/admin">后台管理</a></li>
+                                        <li><a href="/logout">退出登录</a></li>
+                                    </ul>
+                                    <ul th:if="${session.user.role.role == 'business'}">
+                                        <li><a href="/admin">后台管理</a></li>
+                                        <li><a href="/logout">退出登录</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- /top_menu -->
+                    <a href="#menu" class="btn_mobile">
+                        <div class="hamburger hamburger--spin" id="hamburger">
+                            <div class="hamburger-box">
+                                <div class="hamburger-inner"></div>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- /btn_mobile -->
+                    <nav id="menu" class="main-menu">
+                        <ul>
+                            <li id="showCart">
+                                <span>
+                                    <a href="#" style="font-weight: bold; color: #3578FA; ">不确定再看看</a>
+                                </span>
+                                <div class="v-popover is-bottom-start"
+                                     id="cartContent"
+                                     style="padding-top: 8px;  background: #ffffff; display: none">
+
+
+                                </div>
+                            </li>
+                            <li>
+                                <span><a href="/dish">菜品浏览</a></span>
+                            </li>
+                            <li>
+                                <span><a href="/store">档口浏览</a></span>
+                            </li>
+                            <li>
+                                <span><a href="#">网友笔记</a></span>
+                                <ul>
+                                    <li><a href="/note?sort=id">最新笔记</a></li>
+                                    <li><a href="/note?sort=likeSize">热门笔记</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span><a href="#">点评榜单</a></span>
+                                <ul>
+                                    <li><a href="/rank/dish">菜品排行</a></li>
+                                    <li><a href="/rank/store">最受欢迎的档口</a></li>
+                                    <li><a href="/rank/store/storeEnvironment">档口环境排行</a></li>
+                                    <li><a href="/rank/store/storeService">档口服务排行</a></li>
+                                    <li><a href="/rank/store/storeTaste">档口口味排行</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span><a href="#">优质推荐</a></span>
+                                <ul>
+                                    <li><a href="/ad/store">优质档口</a></li>
+                                    <li><a href="/ad/dish">推荐菜品</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </header>
+    <!-- /header -->

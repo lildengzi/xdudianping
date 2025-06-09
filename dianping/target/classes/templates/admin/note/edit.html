@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+<div class="wrapper">
+    <!-- 菜单栏模块 -->
+    <div th:replace="admin/module/_sidebar"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 style="display: inline-block;">笔记发布</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="#"><i
+                            class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li>
+                    <a data-pjax="true" href="#">笔记管理</a>
+                </li>
+                <li class="active">修改</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <!-- form start -->
+
+                        <div class="box-body">
+                            <div class="row">
+                                <form id="form">
+                                    <div class="col-md-12">
+
+                                        <input type="hidden" id="id" name="id" th:value="${item.id}">
+
+
+                                        <div class="form-group">
+                                            <label>笔记标题</label>
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                   th:value="${item.title}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>笔记内容</label>
+                                            <textarea id="content" th:text="${item.content}"></textarea>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="save()">发布</button>
+                                <a href="/admin/note" type="button" class="btn btn-info btn-sm">返回</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+
+
+            tinymce.init({
+                selector: '#content',
+                language: "zh_CN",
+                height: 400,
+                theme: "silver",
+                browser_spellcheck: true, // 拼写检查
+                branding: true, // 去水印
+                // elementpath: false,  //禁用编辑器底部的状态栏
+                statusbar: false, // 隐藏编辑器底部的状态栏
+                paste_data_images: true, // 允许粘贴图像
+                menubar: true, // 隐藏最上方menu
+                fontsize_formats:
+                    "12px 13px 14px 15px 16px 17px 18px 20px 22px 24px 26px 30px 35px 40px 50px",
+                plugins:
+                    "print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount  imagetools  contextmenu colorpicker textpattern help code",
+                toolbar:
+                    "formatselect | bold italic strikethrough forecolor backcolor fontsizeselect | link image  | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat| code",
+                paste_webkit_styles: true,
+                paste_data_images: true,  //  设置为允许粘帖图片
+                images_upload_url: '/admin/file/upload', //  图片上传地址
+                contextmenu: `inserttable | cell row column deletetable`,
+                relative_urls: false,
+                remove_script_host: false
+            });
+
+            /**
+             * 提交
+             * @param status 状态
+             */
+            function save() {
+                let title = $('#title').val();
+                if (title == '') {
+                    showErrorMsg('请输入完整信息');
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/note/save',
+                    async: false,
+                    data: {
+                        'id': $('#id').val(),
+                        'title': $('#title').val(),
+                        'content': tinymce.activeEditor.getContent()
+                    },
+                    success: function (data) {
+                        if (data.code == 1) {
+                            showMsgAndRedirect("保存成功", "success", 1000, "/admin/note/list");
+                        } else {
+                            showMsg(data.msg, "error", 1000);
+                        }
+                    }
+                });
+            }
+
+
+        </script>
+    </div>
+
+</div>
+<div th:replace="admin/module/_footer"></div>

@@ -1,0 +1,278 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<div th:replace="home/module/_header"></div>
+<style>
+    .mybox {
+        margin-top: 30px;
+        padding: 30px 20px 0px 20px;
+        box-shadow: 0 8px 40px rgb(185 147 147 / 15%);
+        background: #ffffff;
+    }
+    .main_title_3 {
+        margin-bottom: 20px;
+    }
+    .canteen-box {
+        margin-top: 30px;
+        text-align: center;
+    }
+    .canteen-item {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    .canteen-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    .canteen-item h3 {
+        color: #333;
+        margin: 10px 0;
+        font-size: 24px;
+    }
+    .canteen-item p {
+        color: #666;
+        margin-bottom: 15px;
+    }
+    .canteen-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+</style>
+
+<main>
+    <section class="hero_single version_1">
+        <div class="wrapper">
+            <div class="container">
+                <h3>搜索菜品或店铺!</h3>
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
+                        <form method="GET" action="javascript:void(0)">
+                            <div class="row no-gutters custom-search-input-2">
+                                <div class="col-lg-7">
+                                    <div class="form-group">
+                                        <input class="form-control" id="searchValue" type="text"
+                                               placeholder="请输入关键字">
+                                        <i class="icon_search"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <select class="wide" id="searchType">
+                                        <option value="dish">菜品</option>
+                                        <option value="store">店铺</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input type="submit" onclick="indexSearch()" value="搜索">
+                                </div>
+                            </div>
+                            <!-- /row -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /hero_single -->
+
+    <!-- 食堂信息区域 -->
+    <div class="container canteen-box">
+        <div class="main_title_3">
+            <h2>校园食堂</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-4" th:each="canteen : ${canteens}">
+                <div class="canteen-item">
+                    <img th:src="${canteen.photo}" th:alt="${canteen.name}">
+                    <h3 th:text="${canteen.name}">食堂名称</h3>
+                    <p th:text="${canteen.description}">食堂描述</p>
+                    <a th:href="@{'/canteen/' + ${canteen.id}}" class="btn_1">查看档口</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /食堂信息区域 -->
+
+    <div class="container mybox" >
+        <div class="main_title_3">
+            <h2>猜你喜欢</h2>
+            <a href="/dish" class="btn btn-sm btn-primary">查看所有菜品</a>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-sm-6" th:each="item : ${latestTopRankDish}">
+                <a th:href="'/dish/'+${item.id}" class="grid_item">
+                    <figure>
+                        <img th:src="${item.photo}" alt="">
+                        <div class="info">
+                            <small>[[${item.viewSize}]] 热度</small>
+                            <em><i class="icon-comment"></i> [[${item.commentSize}]] 评价</em>
+                            <h3 th:text="${item.name}"></h3>
+                        </div>
+                    </figure>
+                </a>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+
+    <div class="container mybox">
+        <div class="main_title_3">
+            <h2>优质店铺</h2>
+            <a href="/store" class="btn btn-sm btn-primary">查看所有店铺</a>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-sm-6" th:each="item : ${recommendStoreList}">
+                <a th:href="'/store/'+${item.id}" class="grid_item">
+                    <figure>
+                        <img th:src="${item.photo}" alt="">
+                        <div class="info">
+                            <small>[[${item.viewSize}]] 热度</small>
+                            <em><i class="icon-comment"></i> [[${item.commentSize}]] 评价</em>
+                            <h3 th:text="${item.name}"></h3>
+                        </div>
+                    </figure>
+                </a>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+    <div class="container mybox" style="margin-bottom: 30px">
+        <div class="main_title_3">
+            <h2>推荐菜品</h2>
+            <a href="/dish" class="btn btn-sm btn-primary">查看所有菜品</a>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-sm-6" th:each="item : ${recommendDishList}">
+                <a th:href="'/dish/'+${item.id}" class="grid_item">
+                    <figure>
+                        <img th:src="${item.photo}" alt="">
+                        <div class="info">
+                            <small>[[${item.viewSize}]] 热度</small>
+                            <em><i class="icon-comment"></i> [[${item.commentSize}]] 评价</em>
+                            <h3 th:text="${item.name}"></h3>
+                        </div>
+                    </figure>
+                </a>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+
+    <div class="bg_color_1" style="margin-bottom: 30px">
+        <div class="container margin_60">
+            <div class="main_title_3">
+                <h2>最新菜品评价</h2>
+            </div>
+
+            <div id="reccomended" class="owl-carousel owl-theme">
+                <div class="item" th:each="item : ${dishCommentList}">
+                    <div class="review_listing">
+                        <div class="clearfix">
+                            <figure><a th:href="'/note/user/'+${item.userId}"><img th:src="${item.user.userAvatar}"
+                                                                                   alt=""></a></figure>
+                            <span class="rating">
+                                    <i class="icon_star" th:if="${item.score == 1}"
+                                       th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 2}"
+                                       th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 3}"
+                                       th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 4}"
+                                       th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 5}"
+                                       th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                    <i class="icon_star empty" th:if="${item.score == 0}"
+                                       th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                    <i class="icon_star empty" th:if="${item.score == 1}"
+                                       th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                    <i class="icon_star empty" th:if="${item.score == 2}"
+                                       th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                    <i class="icon_star empty" th:if="${item.score == 3}"
+                                       th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                    <i class="icon_star empty" th:if="${item.score == 4}"
+                                       th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                    <em>[[${item.scoreStr}]]</em>
+                                </span>
+                            <small>Shops</small>
+                        </div>
+                        <h3><strong>[[${item.user.userDisplayName}]]</strong> 评价了
+                            <a th:href="'/dish/'+${item.dish.id}">[[${item.dish.name}]]</a></h3>
+                        <h4></h4>
+                        <p th:utext="${item.content}"></p>
+                        <ul class="clearfix">
+                            <li><small>发布于 [[${#dates.format(item.createTime,'yyyy-MM-dd HH:mm')}]]</small></li>
+                            <li><a th:href="'/dish/'+${item.dish.id}" class="btn_1 small">查看详情</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- /carousel -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /bg_color_1 -->
+
+    <div class="bg_color_1" style="margin-bottom: 30px">
+        <div class="container margin_60">
+            <div class="main_title_3">
+                <h2>最新店铺评价</h2>
+            </div>
+
+            <div id="reccomended2" class="owl-carousel owl-theme">
+                <div class="item" th:each="item : ${storeCommentList}">
+                    <div class="review_listing">
+                        <div class="clearfix">
+                            <figure><a th:href="'/note/user/'+${item.userId}"><img th:src="${item.user.userAvatar}"
+                                                                                   alt=""></a></figure>
+                            <span class="rating">
+                                    <i class="icon_star" th:if="${item.score == 1}"
+                                       th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 2}"
+                                       th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 3}"
+                                       th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 4}"
+                                       th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                    <i class="icon_star" th:if="${item.score == 5}"
+                                       th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                    <em>[[${item.scoreStr}]]</em>
+                                </span>
+                            <small>Shops</small>
+                        </div>
+                        <h3><strong>[[${item.user.userDisplayName}]]</strong> 评价了
+                            <a th:href="'/store/'+${item.store.id}">[[${item.store.name}]]</a></h3>
+                        <h4></h4>
+                        <p th:utext="${item.content}"></p>
+                        <ul class="clearfix">
+                            <li><small>发布于 [[${#dates.format(item.createTime,'yyyy-MM-dd HH:mm')}]]</small></li>
+                            <li><a th:href="'/store/'+${item.store.id}+'/comment'" class="btn_1 small">查看详情</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- /carousel -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /bg_color_1 -->
+    <!-- /call_section -->
+
+</main>
+<!-- /main -->
+
+<div th:replace="home/module/_footer"></div>

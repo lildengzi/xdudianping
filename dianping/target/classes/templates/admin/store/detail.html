@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+<div class="wrapper">
+    <!-- 菜单栏模块 -->
+    <div th:replace="admin/module/_sidebar"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 style="display: inline-block;">店铺详情</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="#"><i
+                            class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li>
+                    <a data-pjax="true" href="#">店铺管理</a>
+                </li>
+                <li class="active">详情</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <!-- form start -->
+
+                        <div class="box-body">
+                            <div class="row">
+                                <form id="form">
+                                    <div class="col-md-6">
+
+
+                                        <div class="form-group">
+                                            <label>店铺照片</label>
+                                            <div class="col-6">
+                                                <div class="input-group">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <img th:src="${item.photo}" id="photoImg" style="width: 200px;" alt="">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>店铺名称</label>
+                                            <input type="text" class="form-control" name="name" disabled th:value="${item.name}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>店铺责任人姓名</label>
+                                            <input type="text" class="form-control" name="businessName" disabled
+                                                   th:value="${item.businessName}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>店铺责任人手机号</label>
+                                            <input type="text" class="form-control" name="businessPhone" disabled
+                                                   th:value="${item.businessPhone}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>店铺授权管理账号</label>
+                                            <input type="text" class="form-control" name="businessAccount" disabled
+                                                   th:value="${item.user == null ? '' : item.user.userName}">
+                                        </div>
+
+
+                                    </div>
+                                </form>
+
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <a href="/admin/store" type="button" class="btn btn-info btn-sm">返回</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+
+
+            /**
+             * 提交
+             * @param status 状态
+             */
+            function save() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/store/save',
+                    async: false,
+                    data: $('#form').serialize(),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            showMsgAndRedirect("保存成功", "success", 1000, "/admin/store/list");
+                        } else {
+                            showMsg(data.msg, "error", 1000);
+                        }
+                    }
+                });
+            }
+
+
+            $('body').on('change', '#file', function () {
+                var formData = new FormData();
+                var files = $($(this))[0].files[0];
+                formData.append("file", files);
+                $.ajax({
+                    url: '/admin/file/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res);
+                        $('#photo').val(res.link);
+                        $('#photoImg').attr('src', res.link);
+                    }
+                    , error: function (res) {
+                    }
+                });
+            })
+
+
+        </script>
+    </div>
+
+</div>
+<div th:replace="admin/module/_footer"></div>

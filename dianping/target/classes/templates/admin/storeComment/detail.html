@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+<div class="wrapper">
+    <!-- 菜单栏模块 -->
+    <div th:replace="admin/module/_sidebar"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 style="display: inline-block;">店铺评价详情</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="#"><i
+                            class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li>
+                    <a data-pjax="true" href="#">店铺评价管理</a>
+                </li>
+                <li class="active">详情</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <!-- form start -->
+
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>店铺评价内容</label>
+                                            <div class="form-group">
+                                                <div th:utext="${item.content}"></div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div th:each="comment : ${replyList}" class="form-group"
+                                             th:if="${comment.status != 0 || !isCustomer}">
+                                            <label>商家于 [[${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}]] 回复内容 <span th:if="${comment.status == 0 && !isCustomer}" class="text-orange">待审核</span> </label>
+                                            <div class="form-group">
+                                                <div th:utext="${comment.content}"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <a href="javascript:history.go(-1);" type="button" class="btn btn-info btn-sm">返回</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+
+
+        </script>
+    </div>
+
+</div>
+<div th:replace="admin/module/_footer"></div>

@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<div th:replace="home/module/_header"></div>
+<style>
+    .rating i {
+        background-color: #fff;
+        color: #777;
+    }
+</style>
+<main>
+
+
+    <div class="user_summary">
+        <div class="wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <figure>
+                            <img th:src="${user.userAvatar}" alt="">
+                        </figure>
+                        <h1>[[${user.userDisplayName}]]</h1>
+                        <span>[[${user.userName}]]</span>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li>
+                                <strong>[[${likeSize}]]</strong>
+                                <a href="#0" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="获得点赞数"><i class="icon-thumbs-up-alt"></i> 点赞数</a>
+                            </li>
+                            <li>
+                                <strong>[[${commentSize}]]</strong>
+                                <a href="#0" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="获得评论数"><i class="icon-comment"></i> 评论数</a>
+                            </li>
+                            <li>
+                                <strong>[[${markSize}]]</strong>
+                                <a href="#0" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="获得收藏数"><i class="icon-star"></i> 收藏数</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /container -->
+        </div>
+    </div>
+
+
+    <div class="container margin_60_35">
+
+        <div class="isotope-wrapper">
+
+            <div class="review_card"  th:each="item : ${dataList}">
+                <div class="row">
+                    <div class="col-md-2 user_info">
+                        <figure><a th:href="'/note/user/'+${item.userId}"><img th:src="${item.user.userAvatar}" alt=""></a></figure>
+                        <h5 style="padding-left: 10px;font-weight: bold"><a th:href="'/note/user/'+${item.userId}">[[${item.user.userDisplayName}]]</a></h5>
+                    </div>
+                    <div class="col-md-10 review_content">
+                        <h4><a th:href="'/note/'+${item.id}">[[${item.title}]]</a></h4>
+                        <p th:utext="${item.content}"></p>
+                        <div class="clearfix add_bottom_15" style="color: #777">
+                            <span class="rating">
+                                <i class="icon-thumbs-up-alt"></i>[[${item.likeSize}]] 赞
+                                <i class="icon-comment"></i>[[${item.commentSize}]] 评论 &nbsp;
+                                <i class="icon-star"></i>[[${item.markSize}]] 收藏
+                            </span>
+                            <em>发布于 [[${#dates.format(item.createTime,'yyyy-MM-dd HH:mm')}]] </em>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+        </div>
+        <!-- /isotope-wrapper -->
+
+        <div class="pagination__wrapper add_bottom_30">
+            <ul class="pagination" th:if="${pageInfo.total > 0}">
+                <li th:if="${pageInfo.current > 1}">
+                    <a class="prev" tabindex="-1"
+                       th:href="'?page='+${pageInfo.current-1}+'&keywords='+${keywords}">
+                        ❮
+                    </a>
+                </li>
+                <li th:each="i: ${#numbers.sequence(1, pageInfo.pages)}" th:if="${pageInfo.pages > 1}">
+                    <a th:classappend="${pageInfo.current == i ? 'active' : ''}"
+                       th:href="'?page='+${i}+'&keywords='+${keywords}">[[${i}]]</a>
+                </li>
+                <li th:if="${pageInfo.pages > pageInfo.current}">
+                    <a class="next"
+                       th:href="'?page='+${pageInfo.current+1}+'&keywords='+${keywords}">
+                        ❯
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+    <!-- /container -->
+
+</main>
+<!--/main-->
+
+<div th:replace="home/module/_footer"></div>

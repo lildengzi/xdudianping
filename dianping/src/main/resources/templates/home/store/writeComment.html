@@ -1,0 +1,310 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <div th:replace="home/module/_header"></div>
+    <main class="margin_main_container">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="box_general write_review">
+                        <h1>请给店铺进行评价</h1>
+                        <div class="rating_submit">
+                            <div class="form-group">
+                                <label class="d-block">店铺总体评分 <span class="text-danger">*</span></label>
+                                <span class="rating">
+                                    <input type="radio" id="scoreStar_1" class="rating-input" name="rating-input" value="5" required><label data-value="5" for="scoreStar_1" class="rating-star commentStar"></label>
+                                    <input type="radio" id="scoreStar_2" class="rating-input" name="rating-input" value="4"><label data-value="4" for="scoreStar_2" class="rating-star commentStar"></label>
+                                    <input type="radio" id="scoreStar_3" class="rating-input" name="rating-input" value="3"><label data-value="3" for="scoreStar_3" class="rating-star commentStar"></label>
+                                    <input type="radio" id="scoreStar_4" class="rating-input" name="rating-input" value="2"><label data-value="2" for="scoreStar_4" class="rating-star commentStar"></label>
+                                    <input type="radio" id="scoreStar_5" class="rating-input" name="rating-input" value="1"><label data-value="1" for="scoreStar_5" class="rating-star commentStar"></label>
+                                </span>
+                                <input type="hidden" id="score">
+                                <small class="text-muted">请选择总体评分</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-block">店铺环境评分 <span class="text-danger">*</span></label>
+                                <span class="rating">
+                                    <input type="radio" id="environmentScoreStar_1" class="rating-input" name="environment-rating" value="5" required><label data-value="5" for="environmentScoreStar_1" class="rating-star commentStar2"></label>
+                                    <input type="radio" id="environmentScoreStar_2" class="rating-input" name="environment-rating" value="4"><label data-value="4" for="environmentScoreStar_2" class="rating-star commentStar2"></label>
+                                    <input type="radio" id="environmentScoreStar_3" class="rating-input" name="environment-rating" value="3"><label data-value="3" for="environmentScoreStar_3" class="rating-star commentStar2"></label>
+                                    <input type="radio" id="environmentScoreStar_4" class="rating-input" name="environment-rating" value="2"><label data-value="2" for="environmentScoreStar_4" class="rating-star commentStar2"></label>
+                                    <input type="radio" id="environmentScoreStar_5" class="rating-input" name="environment-rating" value="1"><label data-value="1" for="environmentScoreStar_5" class="rating-star commentStar2"></label>
+                                </span>
+                                <input type="hidden" id="environmentScore">
+                                <small class="text-muted">请选择环境评分</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-block">店铺服务评分 <span class="text-danger">*</span></label>
+                                <span class="rating">
+                                    <input type="radio" id="serviceScoreStar_1" class="rating-input" name="service-rating" value="5" required><label data-value="5" for="serviceScoreStar_1" class="rating-star commentStar3"></label>
+                                    <input type="radio" id="serviceScoreStar_2" class="rating-input" name="service-rating" value="4"><label data-value="4" for="serviceScoreStar_2" class="rating-star commentStar3"></label>
+                                    <input type="radio" id="serviceScoreStar_3" class="rating-input" name="service-rating" value="3"><label data-value="3" for="serviceScoreStar_3" class="rating-star commentStar3"></label>
+                                    <input type="radio" id="serviceScoreStar_4" class="rating-input" name="service-rating" value="2"><label data-value="2" for="serviceScoreStar_4" class="rating-star commentStar3"></label>
+                                    <input type="radio" id="serviceScoreStar_5" class="rating-input" name="service-rating" value="1"><label data-value="1" for="serviceScoreStar_5" class="rating-star commentStar3"></label>
+                                </span>
+                                <input type="hidden" id="serviceScore">
+                                <small class="text-muted">请选择服务评分</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-block">店铺口味评分 <span class="text-danger">*</span></label>
+                                <span class="rating">
+                                    <input type="radio" id="tasteScoreStar_1" class="rating-input" name="taste-rating" value="5" required><label data-value="5" for="tasteScoreStar_1" class="rating-star commentStar4"></label>
+                                    <input type="radio" id="tasteScoreStar_2" class="rating-input" name="taste-rating" value="4"><label data-value="4" for="tasteScoreStar_2" class="rating-star commentStar4"></label>
+                                    <input type="radio" id="tasteScoreStar_3" class="rating-input" name="taste-rating" value="3"><label data-value="3" for="tasteScoreStar_3" class="rating-star commentStar4"></label>
+                                    <input type="radio" id="tasteScoreStar_4" class="rating-input" name="taste-rating" value="2"><label data-value="2" for="tasteScoreStar_4" class="rating-star commentStar4"></label>
+                                    <input type="radio" id="tasteScoreStar_5" class="rating-input" name="taste-rating" value="1"><label data-value="1" for="tasteScoreStar_5" class="rating-star commentStar4"></label>
+                                </span>
+                                <input type="hidden" id="tasteScore">
+                                <small class="text-muted">请选择口味评分</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>您的评价 <span class="text-danger">*</span></label>
+                            <textarea class="form-control" style="height: 180px;" id="commentContent" placeholder="请输入评价内容（2-200字）" maxlength="200" required></textarea>
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-muted">还可以输入 <span id="remainingChars">200</span> 个字符</small>
+                                <small class="text-muted">最少2个字符</small>
+                            </div>
+                            <input type="hidden" id="storeId" th:value="${item.id}">
+                        </div>
+                        <div class="form-group">
+                            <label>上传图片（可选，最多3张）</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="commentImages" multiple accept="image/*">
+                                <label class="custom-file-label" for="commentImages">选择图片</label>
+                            </div>
+                            <div id="imagePreview" class="mt-3 d-flex flex-wrap">
+                                <!-- 预览图片将在这里显示 -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>添加标签（可选）</label>
+                            <div class="tag-container">
+                                <label class="tag-item">
+                                    <input type="checkbox" name="tags" value="性价比高"> 性价比高
+                                </label>
+                                <label class="tag-item">
+                                    <input type="checkbox" name="tags" value="分量足"> 分量足
+                                </label>
+                                <label class="tag-item">
+                                    <input type="checkbox" name="tags" value="服务好"> 服务好
+                                </label>
+                                <label class="tag-item">
+                                    <input type="checkbox" name="tags" value="环境好"> 环境好
+                                </label>
+                                <label class="tag-item">
+                                    <input type="checkbox" name="tags" value="特色菜"> 特色菜
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkboxes float-left add_bottom_15 add_top_15">
+                                <label class="container_check">我承诺我的评价真实有效
+                                    <input type="checkbox" id="commentCheck" required>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <div class="form-group">
+                            <a href="javascript:void(0)" id="submitStoreComment" class="btn_1">提交评价</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /col -->
+                <div class="col-lg-4">
+                    <div class="box_general company_info">
+                        <h3>[[${item.name}]]</h3>
+                        <p>
+                            <img th:src="${item.photo}" style="width: 100%;" alt="">
+                        </p>
+                        <p>
+                            <a th:href="'/dish/'+${item.id}" class="btn btn-primary">菜品主页</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </main>
+    <!--/main-->
+
+    <div th:replace="home/module/_footer"></div>
+
+    <!-- 自定义样式 -->
+    <style>
+    .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .tag-item {
+        background: #f8f9fa;
+        padding: 5px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s ease;
+    }
+    .tag-item:hover {
+        background: #e9ecef;
+    }
+    .tag-item input[type="checkbox"] {
+        display: none;
+    }
+    .tag-item input[type="checkbox"]:checked + span {
+        color: #007bff;
+    }
+    #imagePreview img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+        border-radius: 4px;
+    }
+    .image-preview-container {
+        position: relative;
+        display: inline-block;
+    }
+    .remove-image {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        cursor: pointer;
+    }
+    </style>
+
+    <!-- 自定义脚本 -->
+    <script>
+    $(document).ready(function() {
+        // 字数统计
+        $('#commentContent').on('input', function() {
+            var maxLength = 200;
+            var currentLength = $(this).val().length;
+            var remaining = maxLength - currentLength;
+            $('#remainingChars').text(remaining);
+            
+            if (currentLength < 2) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        // 图片上传预览
+        $('#commentImages').on('change', function() {
+            var files = this.files;
+            if (files.length > 3) {
+                alert('最多只能上传3张图片');
+                this.value = '';
+                return;
+            }
+
+            $('#imagePreview').empty();
+            for (var i = 0; i < files.length; i++) {
+                if (files[i]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var container = $('<div class="image-preview-container"></div>');
+                        var img = $('<img>').attr('src', e.target.result);
+                        var removeBtn = $('<span class="remove-image">&times;</span>');
+                        container.append(img).append(removeBtn);
+                        $('#imagePreview').append(container);
+                    }
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+        });
+
+        // 删除预览图片
+        $(document).on('click', '.remove-image', function() {
+            $(this).parent().remove();
+            $('#commentImages').val('');
+        });
+
+        // 表单验证和提交
+        $('#submitStoreComment').click(function() {
+            // 验证评分
+            if (!$('input[name="rating-input"]:checked').val()) {
+                alert('请选择总体评分');
+                return;
+            }
+            if (!$('input[name="environment-rating"]:checked').val()) {
+                alert('请选择环境评分');
+                return;
+            }
+            if (!$('input[name="service-rating"]:checked').val()) {
+                alert('请选择服务评分');
+                return;
+            }
+            if (!$('input[name="taste-rating"]:checked').val()) {
+                alert('请选择口味评分');
+                return;
+            }
+
+            // 验证评价内容
+            var content = $('#commentContent').val();
+            if (content.length < 2 || content.length > 200) {
+                alert('评价内容必须在2-200字之间');
+                return;
+            }
+
+            // 验证承诺勾选
+            if (!$('#commentCheck').is(':checked')) {
+                alert('请勾选承诺评价真实有效');
+                return;
+            }
+
+            // 收集标签
+            var selectedTags = [];
+            $('input[name="tags"]:checked').each(function() {
+                selectedTags.push($(this).val());
+            });
+
+            // 准备表单数据
+            var formData = new FormData();
+            formData.append('storeId', $('#storeId').val());
+            formData.append('content', content);
+            formData.append('score', $('input[name="rating-input"]:checked').val());
+            formData.append('serviceScore', $('input[name="service-rating"]:checked').val());
+            formData.append('environmentScore', $('input[name="environment-rating"]:checked').val());
+            formData.append('tasteScore', $('input[name="taste-rating"]:checked').val());
+            formData.append('tags', selectedTags.join(','));
+
+            // 添加图片
+            var files = $('#commentImages')[0].files;
+            for (var i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+
+            // 提交评价
+            $.ajax({
+                type: 'POST',
+                url: '/store/storeComment/save',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.code == 1) {
+                        window.location.href = '/commentSuccess';
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function() {
+                    alert('评价提交失败，请稍后重试');
+                }
+            });
+        });
+    });
+    </script>
+</html>

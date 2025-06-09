@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.RoleMapper">
+
+    <select id="findByUserId" resultType="com.example.sens.entity.Role">
+      SELECT
+          t.id,
+          t.role,
+          t.description,
+          t.level,
+          t.is_register_default,
+          t.create_time
+      FROM
+          sys_role t,
+          sys_user u
+      WHERE
+          u.id = #{value} AND
+          t.id = u.role_id
+          ORDER BY t.level DESC
+          LIMIT 1
+  </select>
+
+    <select id="countUserByRoleId" resultType="java.lang.Integer">
+      SELECT
+          count( * )
+      FROM
+          sys_role r,
+          sys_user t
+      WHERE
+          r.id = #{value} AND
+          t.role_id = r.id
+  </select>
+
+
+    <select id="findDefaultRole" resultType="com.example.sens.entity.Role">
+        SELECT
+          t.id,
+          t.role,
+          t.description,
+          t.level,
+          t.is_register_default,
+          t.create_time
+        FROM
+          sys_role t
+        WHERE
+           t.is_register_default = 1
+        ORDER BY t.level ASC
+        LIMIT 1
+    </select>
+
+    <select id="findByRole" resultType="com.example.sens.entity.Role">
+        SELECT
+          t.id,
+          t.role,
+          t.description,
+          t.level,
+          t.is_register_default,
+          t.create_time
+        FROM
+          sys_role t
+        WHERE
+           t.role = #{role}
+        LIMIT 1
+    </select>
+
+
+</mapper>

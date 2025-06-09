@@ -1,0 +1,113 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<div th:replace="home/module/_header"></div>
+<style>
+    .rating i {
+        background-color: #fff;
+        color: #777;
+    }
+</style>
+<main>
+    <div id="results">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-3 col-md-4 col-10">
+                    <h1><strong>[[${pageInfo.total}]]</strong> 条结果 [[${title}]]</h1>
+                </div>
+                <div class="col-xl-3 col-md-3 col-2">
+                    <form action="">
+                        <a href="#0" class="search_mob btn_search_mobile"></a> <!-- /open search panel -->
+                        <div class="row no-gutters custom-search-input-2 inner">
+
+                            <div class="col-lg-11">
+                                <div class="form-group">
+                                    <input class="form-control" name="keywords" th:value="${keywords}" type="text"
+                                           placeholder="搜索笔记...">
+                                    <input type="hidden" name="sort" th:value="${sort}">
+                                </div>
+                            </div>
+                            <div class="col-xl-1 col-lg-1">
+                                <input type="submit" value="Search">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /row -->
+            <div class="search_mob_wp">
+                <form action="/note">
+                    <div class="custom-search-input-2">
+                        <div class="form-group">
+                            <input class="form-control" name="keywords" th:value="${keywords}" type="text"
+                                   placeholder="搜索笔记...">
+                            <i class="icon_search"></i>
+                        </div>
+                        <input type="submit" value="搜索">
+                    </div>
+                </form>
+            </div>
+            <!-- /search_mobile -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /results -->
+
+    <div class="container margin_60_35">
+
+        <div class="isotope-wrapper">
+
+            <div class="review_card"  th:each="item : ${dataList}">
+                <div class="row">
+                    <div class="col-md-2 user_info">
+                        <figure><a th:href="'/note/user/'+${item.userId}"><img th:src="${item.user.userAvatar}" alt=""></a></figure>
+                        <h5 style="padding-left: 10px;font-weight: bold"><a th:href="'/note/user/'+${item.userId}">[[${item.user.userDisplayName}]]</a></h5>
+                    </div>
+                    <div class="col-md-10 review_content">
+                        <h4><a th:href="'/note/'+${item.id}">[[${item.title}]]</a></h4>
+                        <p th:utext="${item.content}"></p>
+                        <div class="clearfix add_bottom_15" style="color: #777">
+                            <span class="rating">
+                                <i class="icon-thumbs-up-alt"></i>[[${item.likeSize}]] 赞
+                                <i class="icon-comment"></i>[[${item.commentSize}]] 评论 &nbsp;
+                                <i class="icon-star"></i>[[${item.markSize}]] 收藏
+                            </span>
+                            <em>发布于 [[${#dates.format(item.createTime,'yyyy-MM-dd HH:mm')}]] </em>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+        </div>
+        <!-- /isotope-wrapper -->
+
+        <div class="pagination__wrapper add_bottom_30">
+            <ul class="pagination" th:if="${pageInfo.total > 0}">
+                <li th:if="${pageInfo.current > 1}">
+                    <a class="prev" tabindex="-1"
+                       th:href="'?page='+${pageInfo.current-1}+'&keywords='+${keywords}+'&sort='+${sort}">
+                        ❮
+                    </a>
+                </li>
+                <li th:each="i: ${#numbers.sequence(1, pageInfo.pages)}" th:if="${pageInfo.pages > 1}">
+                    <a th:classappend="${pageInfo.current == i ? 'active' : ''}"
+                       th:href="'?page='+${i}+'&keywords='+${keywords}+'&sort='+${sort}">[[${i}]]</a>
+                </li>
+                <li th:if="${pageInfo.pages > pageInfo.current}">
+                    <a class="next"
+                       th:href="'?page='+${pageInfo.current+1}+'&keywords='+${keywords}+'&sort='+${sort}">
+                        ❯
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+    <!-- /container -->
+
+</main>
+<!--/main-->
+
+<div th:replace="home/module/_footer"></div>

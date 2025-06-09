@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.StoreMapper">
+    <sql id="tableName">
+        biz_store
+    </sql>
+
+    <sql id="baseColumn">
+        id,name,photo,business_name,business_phone,business_user_id
+    </sql>
+    <update id="updateStoreScore">
+        UPDATE biz_store t
+            SET t.score = ( SELECT ifnull( avg( c.score ), 0 ) FROM biz_store_comment c WHERE c.store_id = t.id and c.status  IN (1, 2)),
+            t.environment_score = ( SELECT ifnull( avg( c.environment_score ), 0 ) FROM biz_store_comment c WHERE c.store_id = t.id  and c.status  IN (1, 2) ),
+            t.service_score = ( SELECT ifnull( avg( c.service_score ), 0 ) FROM biz_store_comment c WHERE c.store_id = t.id  and c.status  IN (1, 2)),
+            t.taste_score = ( SELECT ifnull( avg( c.taste_score ), 0 ) FROM biz_store_comment c WHERE c.store_id = t.id  and c.status  IN (1, 2) ),
+            t.comment_size = ( SELECT ifnull( count(* ), 0 ) FROM biz_store_comment c WHERE c.store_id = t.id  and c.status  IN (1, 2) )
+    </update>
+
+</mapper>

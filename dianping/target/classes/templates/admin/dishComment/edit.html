@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+<div class="wrapper">
+    <!-- 菜单栏模块 -->
+    <div th:replace="admin/module/_sidebar"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 style="display: inline-block;">菜品评价发布</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="#"><i
+                            class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li>
+                    <a data-pjax="true" href="#">菜品评价管理</a>
+                </li>
+                <li class="active">修改</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <!-- form start -->
+
+                        <div class="box-body">
+                            <div class="row">
+                                <form id="form">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <input type="hidden" id="id" name="id" th:value="${item.id}">
+                                            <label for="name">菜品评价名称</label>
+                                            <input type="text" class="form-control" id="name"
+                                                   th:value="${item.name}">
+                                        </div>
+
+
+                                    </div>
+                                </form>
+
+
+                            </div>
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="save()">发布</button>
+                                <a href="javascript:history.go(-1);" type="button" class="btn btn-info btn-sm">返回</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+
+
+            /**
+             * 提交
+             * @param status 状态
+             */
+            function save() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/dishComment/save',
+                    async: false,
+                    data: $('#form').serialize(),
+                    success: function (data) {
+                        if (data.code == 1) {
+                            showMsgAndRedirect("保存成功", "success", 1000, "/admin/dishComment/list");
+                        } else {
+                            showMsg(data.msg, "error", 1000);
+                        }
+                    }
+                });
+            }
+
+
+        </script>
+    </div>
+
+</div>
+<div th:replace="admin/module/_footer"></div>

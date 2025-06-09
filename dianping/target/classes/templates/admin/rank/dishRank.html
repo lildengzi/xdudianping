@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/module/_header"></div>
+<style>
+
+</style>
+<div class="wrapper">
+    <div th:replace="admin/module/_sidebar"></div>
+    <div class="content-wrapper">
+        <style type="text/css" rel="stylesheet">
+
+        </style>
+        <section class="content-header">
+            <h1 style="display: inline-block;">菜品排行</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a data-pjax="true" href="/admin">
+                        <i class="fa fa-dashboard"></i> 首页</a>
+                </li>
+                <li><a data-pjax="true" href="#">排行榜</a></li>
+                <li class="active">菜品排行</li>
+            </ol>
+        </section>
+        <section class="content container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul style="list-style: none;padding-left: 0; vertical-align: center">
+                        <li class="tab-rank">
+                            <a data-pjax="true" th:style="${sort == 'score' ? 'color: #000':''}" href="?sort=score">好评榜 |&nbsp;</a>
+                        </li>
+                        <li class="tab-rank">
+                            <a data-pjax="true" th:style="${sort == 'viewSize' ? 'color: #000':''}" href="?sort=viewSize">热门榜 &nbsp;</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-body table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-1">排名</th>
+                                    <th>菜品照片</th>
+                                    <th>菜品名称</th>
+                                    <th>所属店铺</th>
+                                    <th>评分</th>
+                                    <th>点击数</th>
+                                    <th class="col-md-1">ID</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item, stat : ${dataList}">
+                                    <td>[[${(pageInfo.current - 1 ) * pageInfo.size + stat.index + 1}]]</td>
+                                    <td>
+                                        <a th:href="'/dish/detail?id='+${item.id}">
+                                            <img th:src="${item.photo}" style="width: 100px;height: 100px;" alt="">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a th:href="'/dish/'+${item.id}">[[${item.name}]]</a>
+                                    </td>
+                                    <td>
+                                        <a th:href="'/store/'+${item.store.id}" target="_blank">
+                                            [[${item.store.name}]]
+                                        </a>
+                                    </td>
+                                    <td>
+                                        [[${item.score}]]
+                                    </td>
+                                    <td>
+                                        [[${item.viewSize}]]
+                                    </td>
+                                    <td>
+                                        <a th:href="'/admin/dish/detail?id='+${item.id}">[[${item.id}]]</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <div class="no-margin pull-left">
+                                第 [[${pageInfo.current}]] / [[${pageInfo.pages}]] 页
+                            </div>
+                            <ul class="pagination no-margin pull-right">
+                                <li><a data-pjax="true" th:classappend="${pageInfo.current == 1 ? 'disabled' : ''}"
+                                       class="btn btn-sm"
+                                       href="">
+                                    首页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current == 1 ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.current-1}">
+                                    上一页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current >= pageInfo.pages ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.current+1}">
+                                    下一页
+                                </a>
+                                </li>
+                                <li><a data-pjax="true" class="btn btn-sm"
+                                       th:classappend="${pageInfo.current >= pageInfo.pages ? 'disabled' : ''}"
+                                       th:href="'?page='+${pageInfo.pages}">
+                                    尾页
+                                </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+
+
+        </script>
+    </div>
+</div>
+<div th:replace="admin/module/_footer"></div>
+

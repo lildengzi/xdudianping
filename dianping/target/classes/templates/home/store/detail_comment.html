@@ -1,0 +1,492 @@
+﻿<!doctype html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <!--  店铺的评价  -->
+
+
+    <div th:replace="home/module/_header"></div>
+    <script src="/static/plugins/tinymce/tinymce.min.js"></script>
+
+    <main>
+        <div class="reviews_summary">
+            <div class="wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <figure>
+                                <img th:src="${item.photo}" alt="">
+                            </figure>
+<!--                            <small>店铺信息</small>-->
+                            <h1>[[${item.name}]]</h1>
+                            <p>[[${item.address}]] <br>
+                                <span style="color: #e04040; font-size: 12px; font-size: 0.75rem; font-weight: bold;display: block;margin-top: 5px;">人均消费：[[${item.avgPrice}]]元</span>
+                            </p>
+                            <p th:if="${!hasMark}">
+                                <button class="btn btn-primary btn-xs" th:onclick="'saveStoreMark('+${item.id}+')'">收藏
+                                </button>
+                            </p>
+                            <p th:if="${hasMark}">
+                                <button class="btn btn-danger btn-xs" th:onclick="'cancelStoreMark('+${item.id}+')'">
+                                    取消收藏
+                                </button>
+                            </p>
+                        </div>
+                        <div class="col-lg-6 review_detail">
+                            <div class="row">
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.score < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 1 && item.score < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 2 && item.score < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 3 && item.score < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 4 && item.score < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.score >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>总体评分 [[${item.score}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.environmentScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 1 && item.environmentScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 2 && item.environmentScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 3 && item.environmentScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.environmentScore >= 4 && item.environmentScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+
+                                        <span th:if="${item.environmentScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>环境评分 [[${item.environmentScore}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                   <span class="rating">
+                                        <span th:if="${item.serviceScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 1 && item.serviceScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 2 && item.serviceScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 3 && item.serviceScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 4 && item.serviceScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.serviceScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>服务评分 [[${item.serviceScore}]]分</em>
+                                   </span>
+                                </div>
+                                <div class="col-lg-9 col-9" style="margin-bottom: 10px;">
+                                <span class="rating">
+                                        <span th:if="${item.tasteScore < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 1 && item.tasteScore < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 2 && item.tasteScore < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 3 && item.tasteScore < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 4 && item.tasteScore < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${item.tasteScore >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <em>口味评分 [[${item.tasteScore}]]分</em>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /container -->
+            </div>
+        </div>
+        <!-- /reviews_summary -->
+
+        <div class="container margin_60_35">
+            <div class="row">
+
+                <div class="container margin_tabs">
+                    <div class="tabs">
+                        <nav>
+                            <ul>
+                                <li><a th:href="'/store/'+${item.id}"><i
+                                        class="pe-7s-diamond"></i>菜品<em>店家上架的菜品</em></a></li>
+                                <li class=""><a th:href="'/store/'+${item.id}+'/notice'"><i class="pe-7s-repeat"></i>菜品预告
+                                    <em>特价菜品，优惠套餐</em> </a></li>
+                                <li class="tab-current"><a th:href="'/store/'+${item.id}+'/comment'"><i
+                                        class="pe-7s-comment"></i>评价<em>看看同学们的评价</em></a></li>
+                            </ul>
+                        </nav>
+                        <div class="content">
+                            <section id="section-1">
+                                <div class="row">
+
+                                </div>
+                                <!-- /row -->
+                            </section>
+                            <section id="section-2" class="">
+                                <div class="row">
+
+                                </div>
+                                <!-- /row -->
+                            </section>
+                            <section id="section-3" class="content-current">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="box_general write_review">
+                                            <h1>请给店铺进行评价</h1>
+                                            <div class="rating_submit">
+                                                <div class="form-group">
+                                                    <label class="d-block">店铺总体评分</label>
+                                                    <span class="rating">
+                                                <input type="radio" id="scoreStar_1" class="rating-input"
+                                                       name="rating-input" value="5"><label data-value="5"
+                                                                                            for="scoreStar_1"
+                                                                                            class="rating-star commentStar"></label>
+                                                <input type="radio" id="scoreStar_2" class="rating-input"
+                                                       name="rating-input" value="4"><label data-value="4"
+                                                                                            for="scoreStar_2"
+                                                                                            class="rating-star commentStar"></label>
+                                                <input type="radio" id="scoreStar_3" class="rating-input"
+                                                       name="rating-input" value="3"><label data-value="3"
+                                                                                            for="scoreStar_3"
+                                                                                            class="rating-star commentStar"></label>
+                                                <input type="radio" id="scoreStar_4" class="rating-input"
+                                                       name="rating-input" value="2"><label data-value="2"
+                                                                                            for="scoreStar_4"
+                                                                                            class="rating-star commentStar"></label>
+                                                <input type="radio" id="scoreStar_5" class="rating-input"
+                                                       name="rating-input" value="1"><label data-value="1"
+                                                                                            for="scoreStar_5"
+                                                                                            class="rating-star commentStar"></label>
+                                            </span>
+                                                    <input type="hidden" id="score">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="d-block">店铺环境评分</label>
+                                                    <span class="rating">
+                                                    <input type="radio" id="environmentScoreStar_1" class="rating-input"
+                                                           name="rating-input2" value="5"><label data-value="5"
+                                                                                                 for="environmentScoreStar_1"
+                                                                                                 class="rating-star commentStar2"></label>
+                                                    <input type="radio" id="environmentScoreStar_2" class="rating-input"
+                                                           name="rating-input2" value="4"><label data-value="4"
+                                                                                                 for="environmentScoreStar_2"
+                                                                                                 class="rating-star commentStar2"></label>
+                                                    <input type="radio" id="environmentScoreStar_3" class="rating-input"
+                                                           name="rating-input2" value="3"><label data-value="3"
+                                                                                                 for="environmentScoreStar_3"
+                                                                                                 class="rating-star commentStar2"></label>
+                                                    <input type="radio" id="environmentScoreStar_4" class="rating-input"
+                                                           name="rating-input2" value="2"><label data-value="2"
+                                                                                                 for="environmentScoreStar_4"
+                                                                                                 class="rating-star commentStar2"></label>
+                                                    <input type="radio" id="environmentScoreStar_5" class="rating-input"
+                                                           name="rating-input2" value="1"><label data-value="1"
+                                                                                                 for="environmentScoreStar_5"
+                                                                                                 class="rating-star commentStar2"></label>
+                                                </span>
+                                                    <input type="hidden" id="environmentScore">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="d-block">店铺服务评分</label>
+                                                    <span class="rating">
+                                                    <input type="radio" id="serviceScoreStar_1" class="rating-input"
+                                                           name="rating-input3" value="5"><label data-value="5"
+                                                                                                 for="serviceScoreStar_1"
+                                                                                                 class="rating-star commentStar3"></label>
+                                                    <input type="radio" id="serviceScoreStar_2" class="rating-input"
+                                                           name="rating-input3" value="4"><label data-value="4"
+                                                                                                 for="serviceScoreStar_2"
+                                                                                                 class="rating-star commentStar3"></label>
+                                                    <input type="radio" id="serviceScoreStar_3" class="rating-input"
+                                                           name="rating-input3" value="3"><label data-value="3"
+                                                                                                 for="serviceScoreStar_3"
+                                                                                                 class="rating-star commentStar3"></label>
+                                                    <input type="radio" id="serviceScoreStar_4" class="rating-input"
+                                                           name="rating-input3" value="2"><label data-value="2"
+                                                                                                 for="serviceScoreStar_4"
+                                                                                                 class="rating-star commentStar3"></label>
+                                                    <input type="radio" id="serviceScoreStar_5" class="rating-input"
+                                                           name="rating-input3" value="1"><label data-value="1"
+                                                                                                 for="serviceScoreStar_5"
+                                                                                                 class="rating-star commentStar3"></label>
+                                                </span>
+                                                    <input type="hidden" id="serviceScore">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="d-block">店铺口味评分</label>
+                                                    <span class="rating">
+                                                    <input type="radio" id="tasteScoreStar_1" class="rating-input"
+                                                           name="rating-input4" value="5"><label data-value="5"
+                                                                                                 for="tasteScoreStar_1"
+                                                                                                 class="rating-star commentStar4"></label>
+                                                    <input type="radio" id="tasteScoreStar_2" class="rating-input"
+                                                           name="rating-input4" value="4"><label data-value="4"
+                                                                                                 for="tasteScoreStar_2"
+                                                                                                 class="rating-star commentStar4"></label>
+                                                    <input type="radio" id="tasteScoreStar_3" class="rating-input"
+                                                           name="rating-input4" value="3"><label data-value="3"
+                                                                                                 for="tasteScoreStar_3"
+                                                                                                 class="rating-star commentStar4"></label>
+                                                    <input type="radio" id="tasteScoreStar_4" class="rating-input"
+                                                           name="rating-input4" value="2"><label data-value="2"
+                                                                                                 for="tasteScoreStar_4"
+                                                                                                 class="rating-star commentStar4"></label>
+                                                    <input type="radio" id="tasteScoreStar_5" class="rating-input"
+                                                           name="rating-input4" value="1"><label data-value="1"
+                                                                                                 for="tasteScoreStar_5"
+                                                                                                 class="rating-star commentStar4"></label>
+                                                </span>
+                                                    <input type="hidden" id="tasteScore">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>您的评价</label>
+                                                <textarea class="form-control" style="height: 180px;"
+                                                          id="commentContent" placeholder="请输入评价内容"></textarea>
+                                                <input type="hidden" id="storeId" th:value="${item.id}">
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="checkboxes float-left add_bottom_15 add_top_15">
+                                                    <label class="container_check">我承诺我的评价真实有效
+                                                        <input type="checkbox" id="commentCheck">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div style="clear: both;"></div>
+                                            <div class="form-group">
+                                                <a href="javascript:void(0)" id="submitStoreComment"
+                                                   class="btn_1">提交评价</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="review_card" style="width: 100%; margin-left: 15px;margin-right: 15px;" th:each="comment : ${dataList}">
+                                        <div class="row">
+                                            <div class="col-md-2 user_info" style="text-align: center">
+                                                <figure><a th:href="'/note/user/'+${comment.userId}"><img th:src="${comment.user.userAvatar}" alt=""></a></figure>
+                                                <h5 style="padding-left: 10px;font-weight: bold;color: #3578fa;">[[${comment.user.userDisplayName}]]</h5>
+                                            </div>
+                                            <div class="col-md-10 review_content">
+                                                <div class="clearfix add_bottom_15">
+                                    <span class="rating">
+
+                                         <span th:if="${comment.score < 1}">
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+                                        <span th:if="${comment.score >= 1 && comment.score < 2}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                        </span>
+                                        <span th:if="${comment.score >= 2 && comment.score < 3}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                        </span>
+                                        <span th:if="${comment.score >= 3 && comment.score < 4}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 3)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 2)}"></i>
+                                        </span>
+                                        <span th:if="${comment.score >= 4 && comment.score < 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 4)}"></i>
+                                            <i class="icon_star empty" th:each="i: ${#numbers.sequence(1, 1)}"></i>
+                                        </span>
+                                        <span th:if="${comment.score >= 5}">
+                                            <i class="icon_star" th:each="i: ${#numbers.sequence(1, 5)}"></i>
+                                        </span>
+
+                                        <em> [[${comment.scoreStr}]]</em>
+                                   </span>
+                                                    <em>[[${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}]]</em>
+                                                </div>
+                                                <p th:utext="${comment.content}"></p>
+                                            </div>
+                                        </div>
+                                        <!-- /row -->
+                                        <div class="row reply" th:each="reply : ${comment.childCommentList}">
+                                            <div class="col-md-2 user_info" style="text-align: right;">
+                                                <figure><img th:src="${reply.user.userAvatar}" alt=""></figure>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="review_content">
+                                                    <strong>[[${reply.user.userDisplayName}]] 回复</strong>
+                                                    <em>[[${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm')}]]</em>
+                                                    <p>[[${reply.content}]]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /reply -->
+                                    </div>
+
+                                    <!-- /review_card -->
+                                    <div class="pagination__wrapper add_bottom_30">
+                                        <ul class="pagination" th:if="${pageInfo.total > 0}">
+                                            <li th:if="${pageInfo.current > 1}">
+                                                <a class="prev" tabindex="-1"
+                                                   th:href="'?page='+${pageInfo.current-1}">
+                                                    ❮
+                                                </a>
+                                            </li>
+                                            <li th:each="i: ${#numbers.sequence(1, pageInfo.pages)}" th:if="${pageInfo.pages > 1}">
+                                                <a th:classappend="${pageInfo.current == i ? 'active' : ''}"
+                                                   th:href="'?page='+${i}">[[${i}]]</a>
+                                            </li>
+                                            <li th:if="${pageInfo.pages > pageInfo.current}">
+                                                <a class="next"
+                                                   th:href="'?page='+${pageInfo.current+1}">
+                                                    ❯
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /pagination -->
+                                </div>
+                                <!-- /row -->
+                            </section>
+                        </div>
+                        <!-- /content -->
+                    </div>
+                    <!-- /tabs -->
+                </div>
+
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+
+    </main>
+    <!--/main-->
+
+    <div th:replace="home/module/_footer"></div>
+    <script>
+        tinymce.init({
+            selector: '#commentContent',
+            language: "zh_CN",
+            height: 400,
+            theme: "silver",
+            browser_spellcheck: true, // 拼写检查
+            branding: true, // 去水印
+            // elementpath: false,  //禁用编辑器底部的状态栏
+            statusbar: false, // 隐藏编辑器底部的状态栏
+            paste_data_images: true, // 允许粘贴图像
+            menubar: true, // 隐藏最上方menu
+            fontsize_formats:
+                "12px 13px 14px 15px 16px 17px 18px 20px 22px 24px 26px 30px 35px 40px 50px",
+            plugins:
+                "image",
+            toolbar:
+                "formatselect | bold italic strikethrough forecolor backcolor fontsizeselect | link image",
+            paste_webkit_styles: true,
+            paste_data_images: true,  //  设置为允许粘帖图片
+            images_upload_url: '/admin/file/upload', //  图片上传地址
+            contextmenu: `inserttable | cell row column deletetable`,
+            relative_urls: false,
+            remove_script_host: false
+        });
+
+
+        $(document).on('click', '#submitStoreComment', function () {
+            let score = $('#score').val();
+            if (score == '' || score > 5 || score < 1) {
+                alert('请给店铺总体打分');
+                return;
+            }
+            let serviceScore = $('#serviceScore').val();
+            if (serviceScore == '' || serviceScore > 5 || serviceScore < 1) {
+                alert('请给店铺服务打分');
+                return;
+            }
+            let environmentScore = $('#environmentScore').val();
+            if (environmentScore == '' || environmentScore > 5 || environmentScore < 1) {
+                alert('请给店铺环境打分');
+                return;
+            }
+            let tasteScore = $('#tasteScore').val();
+            if (tasteScore == '' || tasteScore > 5 || tasteScore < 1) {
+                alert('请给店铺口味打分');
+                return;
+            }
+            // let content = $('#commentContent').val();
+            let content = tinymce.activeEditor.getContent();
+            if (content.length < 2) {
+                alert('评价不少于2个字符');
+                return;
+            }
+            let commentCheck = $('#commentCheck').prop('checked');
+            if (commentCheck == false) {
+                alert('请勾选承诺协议');
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/store/storeComment/save',
+                async: false,
+                data: {
+                    'storeId': $('#storeId').val(),
+                    'content': content,
+                    'score': score,
+                    'serviceScore': serviceScore,
+                    'environmentScore': environmentScore,
+                    'tasteScore': tasteScore,
+                },
+                success: function (data) {
+                    if (data.code == 1) {
+                        window.location.href = '/commentSuccess';
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+    </script>

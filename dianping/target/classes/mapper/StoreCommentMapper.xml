@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.StoreCommentMapper">
+    <sql id="tableName">
+        biz_store_comment
+    </sql>
+
+    <sql id="baseColumn">
+        id,user_id,store_id,content,pid,score,service_score,environment_score,taste_state
+    </sql>
+
+    <select id="getStoreTasteRank" resultType="com.example.sens.common.vo.RankVO">
+        SELECT
+            store_id AS storeId,
+            sum( taste_score ) totalScore,
+            count( * ) count,
+            sum( taste_score ) / count( * ) avgScore
+        FROM
+            biz_store_comment
+        WHERE
+            pid = 0
+        GROUP BY
+            store_id
+        ORDER BY
+            avgScore DESC
+        limit 10
+    </select>
+
+    <select id="getStoreEnvironmentRank" resultType="com.example.sens.common.vo.RankVO">
+        SELECT
+            store_id AS storeId,
+            sum( environment_score ) totalScore,
+            count( * ) count,
+            sum( environment_score ) / count( * ) avgScore
+        FROM
+            biz_store_comment
+        WHERE
+            pid = 0
+        GROUP BY
+            store_id
+        ORDER BY
+            avgScore DESC
+         limit 10
+    </select>
+
+
+    <select id="getStoreServiceRank" resultType="com.example.sens.common.vo.RankVO">
+        SELECT
+            store_id AS storeId,
+            sum( service_score ) totalScore,
+            count( * ) count,
+            sum( service_score ) / count( * ) avgScore
+        FROM
+            biz_store_comment
+        WHERE
+            pid = 0
+        GROUP BY
+            store_id
+        ORDER BY
+            avgScore DESC
+        limit 10
+    </select>
+
+</mapper>

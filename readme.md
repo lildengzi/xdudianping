@@ -2,11 +2,13 @@
 
 这是一个基于 Spring Boot + MyBatis 的餐饮点评平台示例，包含：用户、商户、管理员三种身份功能，支持菜品评价、店铺评价、收藏、笔记、排行榜、特价预告等核心业务。
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)
-![JMeter](https://img.shields.io/badge/JMeter-D22128?style=flat&logo=apache-jmeter&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17+-ED8B00?logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.7+-6DB33F?logo=spring-boot&logoColor=white)
+![MyBatis](https://img.shields.io/badge/MyBatis-3.5+-red)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![JMeter](https://img.shields.io/badge/JMeter-5.5-D22128?logo=apache-jmeter&logoColor=white)
+![Project Management](https://img.shields.io/badge/Project_Management-Agile-blue)
+![Testing](https://img.shields.io/badge/Testing-BlackBox%2FWhiteBox%2FPerformance-green)
 
 ---
 
